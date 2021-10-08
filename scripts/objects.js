@@ -26,14 +26,14 @@ function init() {
       this.flag = flag,
       this.state = state
     }
+    changeState(currentState){
+      this.gridPosition.classList.add(`${currentState}`)
+      this.state = currentState
+    }    
     placeMine() {
       this.gridPosition.classList.add('mine');
       this.gridPosition.innerText = ''
       this.mine = 'on' 
-    }
-    changeState(currentState){
-      this.gridPosition.classList.add(`${currentState}`)
-      this.state = currentState
     }
     // methods for checking for mines in each direction of surrounding field, field is 8 squares around
     // allows for bespoke checking depending on position of the cell (corner, top row, side column etc.)
@@ -82,7 +82,8 @@ function init() {
       }
       else {this.gridPosition.innerText = howManyMines.length
       }
-    }
+    }    
+
   }
 
  // instantiate objects to fill the grid (one for each cell). Also pushing objects to an array to open 
@@ -159,16 +160,20 @@ function init() {
   rightColumn.forEach(item=> {
     item.checkField(item.up(), item.down(), item.left(), item.dul(), item.ddl())
   })
-
-
-
-
+  corners.forEach(item => {
+    if (item === corners[0]){item.checkField(item.down(), item.right(), item.ddr())} 
+    if (item === corners[1]){item.checkField(item.down(), item.left(), item.ddl())}
+    if (item === corners[2]){item.checkField(item.up(), item.right(), item.dur())}
+    if (item === corners[3]){item.checkField(item.up(), item.left(), item.dur())}
+  })
+  //running this to remove numbers from mine cells
+  objectArray.forEach(item => {
+    if (item.mine === 'on'){
+      item.gridPosition.innerText = ''
+    }
+  })
  
 
-  // objectArray[33].checkField(objectArray[33].up(), objectArray[33].left(), objectArray[33].down(), objectArray[33].right(),
-  // objectArray[33].dur(), objectArray[33].dul(), objectArray[33].ddr(), objectArray[33].ddl())
-
- 
 
 
 
@@ -176,33 +181,6 @@ function init() {
 
 
 
-
-
-
-//  function check (x){
-//   const directlyAbove = objectArray[x+width]
-//   return directlyAbove
-//  }
-
-//  console.log(check(5))
-  
-//   function checkIt (item) {
-//     let fieldArray = [];
-//     fieldArray.push(
-//       objectArray[item+1], objectArray[item+width], objectArray[(item+width+1)]);
-//       const howManyMines = fieldArray.filter(item => item.mine === 'on')
-//       objectArray[item].number = howManyMines.length
-//       objectArray[item].gridPosition.innerText = howManyMines.length
-//     }
-    
-//     const corners = [1, 2, 3, 4]
-  
-//     corners.forEach(item => {
-//       if (item === corners[0]) {
-//         checkIt(item);
-//         console.log(item)
-//       }
-//     })
     
     
     
@@ -212,79 +190,7 @@ function init() {
 
 
 
-  //  const columnLeft = []
-  //  const columnRight = []
-  //  const topRow = []
-  //  const mainGrid = []
-  //  const bottomRow = []
- 
-   
-  //  for (let i = 0; i < gridSize; i++) {
-  //    if (i === 0 && i ) {
-  //      columnLeft.push(i)
-  //    }
-  //   }
-  
-  //    else if (i > 0 && i < width) {
-  //      topRow.push(i)
-  //    }
-  //    else if (i > width && i < (88)) {
-  //      mainGrid.push(i)
-  //    }
-  //    else if (i >= (gridSize-width) && i < (gridSize-1)) {
-  //      bottomRow.push(i)
-  //    }
-  //    else if (i === (gridSize-1)) {
-  //      lastIndex.push(i)
-  //    }
-  //  }
-  //  console.log(columnLeft)
-   // zeroIndex.forEach(item => {
-   //   let fieldArray = [];
-   //   fieldArray.push(
-   //    objectArray[item+1], objectArray[item+width], objectArray[(item+width+1)]);
-   //   const howManyMines = fieldArray.filter(item => item.mine === 'on')
-   //   objectArray[item].number = howManyMines.length
-   //   objectArray[item].gridPosition.innerText = howManyMines.length
-   // })
-   // topRow.forEach(item => {
-   //   let fieldArray = [];
-   //   fieldArray.push(
-   //     objectArray[item-1], objectArray[item+1], objectArray[item+width], objectArray[(item+width+1)], objectArray[(item+width-1)]);
-   //   const howManyMines = fieldArray.filter(item => item.mine === 'on')
-   //   objectArray[item].number = howManyMines.length
-   //   objectArray[item].gridPosition.innerText = howManyMines.length
-   // })
-   // mainGrid.forEach(item => {
-   //   let fieldArray = [];
-   //   fieldArray.push(
-   //     objectArray[item-1], objectArray[item+1], objectArray[item-width], objectArray[item+width], objectArray[(item-width)-1], objectArray[(item-width+1)], objectArray[(item+width+1)], objectArray[(item+width-1)]);
-   //   const howManyMines = fieldArray.filter(item => item.mine === 'on')
-   //   objectArray[item].number = howManyMines.length
-   //   objectArray[item].gridPosition.innerText = howManyMines.length
-   // })
-   // bottom.forEach(item => {
-   //   let fieldArray = [];
-   //   fieldArray.push(
-   //     objectArray[item-1], objectArray[item+1], objectArray[item-width], objectArray[(item-width)+1], objectArray[(item-width)-1]);
-   //   const howManyMines = fieldArray.filter(item => item.mine === 'on')
-   //   objectArray[item].number = howManyMines.length
-   //   objectArray[item].gridPosition.innerText = howManyMines.length
-   // })
-   // lastIndex.forEach(item => {
-   //   let fieldArray = [];
-   //   fieldArray.push(
-   //    objectArray[item-1], objectArray[item-width], objectArray[(item-width-1)]);
-   //   const howManyMines = fieldArray.filter(item => item.mine === 'on')
-   //   objectArray[item].number = howManyMines.length
-   //   objectArray[item].gridPosition.innerText = howManyMines.length
-   // })
- 
-  
-     
-     
-     // objectArray[item-1], objectArray[item+1], objectArray[item-width], objectArray[item+width], objectArray[(item-width)-1], objectArray[(i-width+1)], objectArray[(item+width+1)], objectArray[(item+width-1)]);
- 
+
  
 
  
