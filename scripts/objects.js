@@ -1,4 +1,5 @@
 function init() {
+  //variables
   const grid = document.querySelector('.grid-container')
   const width = 10
   const gridSize = width * width
@@ -14,6 +15,8 @@ function init() {
     grid.appendChild(cell)
     cellsArray.push(cell)
   }
+  // class for constructing cell objects, calling methods on which will define the behaviour of each cell
+  // and ultimately the game.
   class Cell {
     constructor (gridPosition, mine, identifier, number, flag, state) {
       this.gridPosition = gridPosition 
@@ -89,7 +92,8 @@ function init() {
     }
   }
 
- // create an array of objects with their position specified on the grid
+ // instantiate objects to fill the grid (one for each cell). Also pushing objects to an array to open 
+ // up more methods for manipulating the data later 
  for (let i = 0; i < gridSize; i++){
    const cellObject = new Cell(document.getElementById(`${i}`), 'off', i, 'none', 'none', 'unclicked')
    objectArray.push(cellObject)
@@ -97,7 +101,6 @@ function init() {
  
   //randomly generate a number and push into array, call the placeMine method in corresponding objects
   // in the objectsArray
- 
   function placeMines (){
     for (let i = 0; i < 25; i++){
       const randomNumber = Math.floor(Math.random() * objectArray.length)
@@ -108,18 +111,45 @@ function init() {
  
   placeMines()
 
+// create arrays corresponding to cell structures that have different restrictions e.g., corner cells, column cells
+// to make it easier to call different methods on each for the checkField method.
+
+  
+  
+  
+  const corners = [objectArray[0], objectArray[width-1], objectArray[gridSize-width], objectArray[gridSize-1]]
+  
+  const topRow = []
+  objectArray.forEach(item => {
+    if (item.identifier > 0 && item.identifier < (width-1)){
+      topRow.push(item)}})
+
+  const bottomRow = []    
+  objectArray.forEach(item => {
+    if (item.identifier > (gridSize - width) && item.identifier < (gridSize - 1)){
+      bottomRow.push(item)}})
+  
+  // populate an array with the correct identifiers and then map those array items to indexes of the objectArray
+  // this will provide an array of a numbers that can be mapped to give both left and right columns
+ const leftColumnNumbers = []
+  for (let i = 1; i < width-1; i++){
+    leftColumnNumbers.push(i * width)
+  }
+  const leftColumn = leftColumnNumbers.map(item => objectArray[item]) 
+  const rightColumn = leftColumnNumbers.map(item => objectArray[item + (width-1)])
+
+  const mainGrid = []
+  objectArray.forEach(item => {
+    if (item.identifier > width && item.identifier < (gridSize-width)-1){
+      mainGrid.push(item)
+    }
+  })
  
-  const diagonalUpleft = (width)-1
-  const diagonalUpRight = (width)+1
-  const diagonalDownLeft = (+width)-1
-  const diagonalDownRight = (+width)+1
 
-  // const newArray = [objectArray[33], objectArray[34], objectArray[35]]
+  // objectArray[33].checkField(objectArray[33].up(), objectArray[33].left(), objectArray[33].down(), objectArray[33].right(),
+  // objectArray[33].dur(), objectArray[33].dul(), objectArray[33].ddr(), objectArray[33].ddl())
 
-objectArray[33].checkField(objectArray[33].up(), objectArray[33].left(), objectArray[33].down(), objectArray[33].right(),
-objectArray[33].dur(), objectArray[33].dul(), objectArray[33].ddr(), objectArray[33].ddl())
-
-
+ 
 
 
 
