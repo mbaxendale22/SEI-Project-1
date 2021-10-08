@@ -38,40 +38,33 @@ function init() {
     // methods for checking for mines in each direction of surrounding field, field is 8 squares around
     // allows for bespoke checking depending on position of the cell (corner, top row, side column etc.)
     up(){
-      console.log(objectArray[this.identifier - width])
       return objectArray[this.identifier - width]
     }
     down(){
-      console.log(objectArray[this.identifier + width])
       return objectArray[this.identifier + width]
     }
     left(){
-      console.log(objectArray[this.identifier - 1])
       return objectArray[this.identifier - 1]
     }
     right(){
-      console.log(objectArray[this.identifier + 1])
       return objectArray[this.identifier + 1]
     }
     dul(){
-      console.log(objectArray[(this.identifier - width) - 1])
       return (objectArray[(this.identifier - width) - 1])
     }
     dur(){
-      console.log(objectArray[(this.identifier - width) + 1])
       return (objectArray[(this.identifier - width) + 1])
       
     }
     ddl(){
-      console.log(objectArray[(this.identifier + width) - 1])
       return (objectArray[(this.identifier + width) - 1])
     }
     ddr(){
-      console.log(objectArray[(this.identifier + width) + 1])
       return (objectArray[(this.identifier + width) + 1])
     }
     // each method passed as parameter to the main checkField methods with control flow
     // to prevent 'undefined' returning from unpassed parameters
+    // ? would like to refactor this to condense it
     checkField(a, b, c, d, e, f, g, h){
       let fieldArray = []
       if (a !== undefined){fieldArray.push(a)}
@@ -84,7 +77,7 @@ function init() {
       if (h !== undefined){fieldArray.push(h)}
       const howManyMines = fieldArray.filter(item => item.mine === 'on')
       this.number = howManyMines.length
-      if (howManyMines.length === 0) {
+      if (howManyMines.length === 0 ) {
         this.gridPosition.innerText = ''
       }
       else {this.gridPosition.innerText = howManyMines.length
@@ -113,9 +106,6 @@ function init() {
 
 // create arrays corresponding to cell structures that have different restrictions e.g., corner cells, column cells
 // to make it easier to call different methods on each for the checkField method.
-
-  
-  
   
   const corners = [objectArray[0], objectArray[width-1], objectArray[gridSize-width], objectArray[gridSize-1]]
   
@@ -138,12 +128,41 @@ function init() {
   const leftColumn = leftColumnNumbers.map(item => objectArray[item]) 
   const rightColumn = leftColumnNumbers.map(item => objectArray[item + (width-1)])
 
-  const mainGrid = []
-  objectArray.forEach(item => {
-    if (item.identifier > width && item.identifier < (gridSize-width)-1){
-      mainGrid.push(item)
+  //nested forloop to push the rest of the numbers into an array, should be scalable, using a map as a above to get indexes
+  let remainingCells = []
+  let startingId = width+1
+  for (let i=0; i < width-2; i++) {
+    for (let j = startingId; j < startingId + width-2; j++){
+      remainingCells.push(j); 
     }
+    startingId += width
+  }
+  const mainGrid = remainingCells.map(item => objectArray[item])
+
+  // use each array to call the checkField method on its elements, passing the appriopriate parameters given the position of the elements on the grid. Corners is a bit awkward because each is different but the other arrays are uniform. 
+
+  mainGrid.forEach(item => {
+    item.checkField(item.up(), item.down(), item.left(), item.right(), item.dur(), item.dul(), item.ddl(), item.ddr())
   })
+
+  bottomRow.forEach(item => {
+    item.checkField(item.up(), item.left(), item.right(), item.dur(), item.dul())
+  })
+
+  topRow.forEach(item => {
+    item.checkField(item.down(), item.right(), item.left(), item.ddl(), item.ddr())
+  })
+
+  leftColumn.forEach(item=> {
+    item.checkField(item.up(), item.down(), item.right(), item.dur(), item.ddr())
+  })
+  rightColumn.forEach(item=> {
+    item.checkField(item.up(), item.down(), item.left(), item.dul(), item.ddl())
+  })
+
+
+
+
  
 
   // objectArray[33].checkField(objectArray[33].up(), objectArray[33].left(), objectArray[33].down(), objectArray[33].right(),
