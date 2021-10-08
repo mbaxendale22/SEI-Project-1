@@ -34,7 +34,7 @@
 /* Contents  */
 
 .mine {
-  background: url('./assests/pngegg.png');
+  background: url('../assets/pngegg.png');
   background-size:contain;
   background-repeat: no-repeat;
 }

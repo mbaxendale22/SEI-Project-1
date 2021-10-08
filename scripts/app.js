@@ -138,6 +138,7 @@ function init () {
 
   checkForMines()
 
+  }
 }
 
 window.addEventListener('DOMContentLoaded', init)
