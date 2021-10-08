@@ -1,0 +1,51 @@
+* {
+  box-sizing: border-box;
+}
+.page-wrapper {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+
+.grid-container{
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  height: 500px;
+  width: 500px;
+  align-items: center;
+  box-shadow: 0 0 20px 0 rgba(0, 0, 0, 0.2);
+}
+
+
+.grid-container div {
+  border: 1px solid lightgray;
+  flex-grow: 1;
+  height: 10%;
+  width: 10%;
+  font-size: 15px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-weight: bold;
+}
+
+/* Contents  */
+
+.mine {
+  background: url('./assests/pngegg.png');
+  background-size:contain;
+  background-repeat: no-repeat;
+}
+
+.flag{}
+
+
+.blank{}
+
+/* States  */
+
+.unrevealed {
+  background: grey;
+}
