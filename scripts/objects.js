@@ -6,6 +6,7 @@ function init() {
   const cellsArray = []
   const minesArray = []
   const objectArray = []
+  let flagsPlaced = 0
  
    // create a grid
    for (let i = 0; i < gridSize; i++){
@@ -26,14 +27,25 @@ function init() {
       this.flag = flag,
       this.state = state
     }
-    changeState(currentState){
-      this.gridPosition.classList.add(`${currentState}`)
-      this.state = currentState
-    }    
+
+    
     placeMine() {
       this.gridPosition.classList.add('mine');
       this.gridPosition.innerText = ''
       this.mine = 'on' 
+      if (this.state === 'unclicked'){
+        this.gridPosition.classList.add('visability')
+      }
+      else if (this.state === 'clicked') 
+      {this.gridPosition.classList.remove('visability')}
+    }
+
+    placeFlag(){
+      this.gridPosition.classList.add('flag')
+      this.innerText = ''
+      this.flag = 'on'
+      flagsPlaced ++
+      console.log(flagsPlaced)
     }
     // methods for checking for mines in each direction of surrounding field, field is 8 squares around
     // allows for bespoke checking depending on position of the cell (corner, top row, side column etc.)
@@ -83,9 +95,28 @@ function init() {
       else {this.gridPosition.innerText = howManyMines.length
       }
     }    
-
+    unclicked() {
+      this.state = 'unclicked'
+      this.gridPosition.innerText = ''
+      this.gridPosition.style.backgroundColor = 'grey'
+      // if (this.gridPosition.classList.contains('mine'){
+      //   this.gridPosition.
+      // }
+    } 
+  
+    clicked() {
+      this.state = 'clicked'
+      this.gridPosition.style.backgroundColor = 'lightGrey'
+      if (this.gridPosition.classList.contains('mine')){
+        this.gridPosition.innerText = ''
+      }
+      else if (this.number === 0) {
+        this.gridPosition.innerText = ''
+      } 
+      else {this.gridPosition.innerText = this.number}
   }
-
+}
+  
  // instantiate objects to fill the grid (one for each cell). Also pushing objects to an array to open 
  // up more methods for manipulating the data later 
  for (let i = 0; i < gridSize; i++){
@@ -167,16 +198,23 @@ function init() {
     if (item === corners[3]){item.checkField(item.up(), item.left(), item.dur())}
   })
   //running this to remove numbers from mine cells
-  objectArray.forEach(item => {
-    if (item.mine === 'on'){
-      item.gridPosition.innerText = ''
-    }
-  })
  
 
+  // this is the way the game will start
+  objectArray.forEach(item => item.unclicked())
 
 
 
+  objectArray.forEach(item => {
+    item.gridPosition.addEventListener('click', event => objectArray[event.target.id].clicked())
+})
+  function handleRightClick(event) {
+    event.preventDefault()
+    objectArray[event.target.id].placeFlag()
+  }
+  objectArray.forEach(item => {
+    item.gridPosition.addEventListener('contextmenu', handleRightClick)
+})
 
 
 
