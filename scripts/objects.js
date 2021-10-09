@@ -132,13 +132,19 @@ function init() {
       // this 'else if' is where the functionality will live for auto opening surrounding cells
       else if (this.number === 0) {
         this.gridPosition.innerText = ''
-        console.log(this.surroundingCells)
         this.surroundingCells.forEach(item => {
-          item.state = 'clicked'
-          item.gridPosition.style.backgroundColor = 'lightGrey'
-          item.number === 0 ? item.gridPosition.innerText = '' : item.gridPosition.innerText = item.number
-          item.autoOpen()
-        })
+          if (item.number === 0) {
+            item.autoOpen()
+            item.surroundingCells.forEach(item => {
+              item.autoOpen()
+            })
+          }
+          })
+          // item.state = 'clicked'
+          // item.gridPosition.style.backgroundColor = 'lightGrey'
+          // item.number === 0 ? item.gridPosition.innerText = '' : 
+          // item.autoOpen()
+          // item.surroundingCells.forEach(item => item.autoOpen())
         // const checkForBlanks = this.surroundingCells.filter(item => item.number === 0)
         // checkForBlanks.forEach(item => item.clicked())
       } 
@@ -228,9 +234,9 @@ function init() {
     if (item === corners[1]){item.checkField(item.down(), item.left(), item.ddl())}
     if (item === corners[2]){item.checkField(item.up(), item.right(), item.dur())}
     if (item === corners[3]){item.checkField(item.up(), item.left(), item.dur())}
-  })
-  //running this to remove numbers from mine cells
- 
+  }) 
+
+  //event listeners
 
   // this is the way the game will start
   objectArray.forEach(item => item.unclicked())
@@ -260,24 +266,7 @@ function handleLeftClick (event){
   grid.addEventListener('click', startTimer, { once: true })
 
 
-if (objectArray[33] === 'clicked') {
-  objectArray[33].surroundingCells.forEach(item => {
-    item.state = 'clicked'
-    item.gridPosition.style.backgroundColor = 'lightGrey'
-    item.number === 0 ? item.gridPosition.innerText = '' : item.gridPosition.innerText = item.number
-  })
-}
 
-  // build the auto open blank function 
-  
-
-  // function autoOpen(){
-  //   objectArray.forEach(item => {
-  //     if (item.number === 0){
-
-  //     }
-  //   })
-  // }
 
 
 
