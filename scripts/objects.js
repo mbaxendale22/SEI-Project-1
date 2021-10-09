@@ -15,6 +15,14 @@ function init() {
   let clickCount = 0
   const finalScore = timer.innerText / clickCount
   
+  // object for managing the current game state
+  const gameManagement = {
+    start: 'on',
+    end: 'off',
+    beginner: 'on',
+    intermediate: 'off',
+    expert: 'off'
+  }
  
    // create a grid
    for (let i = 0; i < gridSize; i++){
@@ -27,13 +35,14 @@ function init() {
   // class for constructing cell objects, calling methods on which will define the behaviour of each cell
   // and ultimately the game.
   class Cell {
-    constructor (gridPosition, mine, identifier, number, flag, state) {
+    constructor (gridPosition, mine, identifier, number, flag, state, surroundingCells) {
       this.gridPosition = gridPosition 
       this.mine = mine,
       this.identifier = identifier
       this.number = number,
       this.flag = flag,
-      this.state = state
+      this.state = state,
+      this.surroundingCells = surroundingCells
     }
 
     placeMine() {
@@ -80,16 +89,15 @@ function init() {
     // to prevent 'undefined' returning from unpassed parameters
     // ? would like to refactor this to condense it
     checkField(a, b, c, d, e, f, g, h){
-      let fieldArray = []
-      if (a !== undefined){fieldArray.push(a)}
-      if (b !== undefined){fieldArray.push(b)}
-      if (c !== undefined){fieldArray.push(c)}
-      if (d !== undefined){fieldArray.push(d)}
-      if (e !== undefined){fieldArray.push(e)}
-      if (f !== undefined){fieldArray.push(f)}
-      if (g !== undefined){fieldArray.push(g)}
-      if (h !== undefined){fieldArray.push(h)}
-      const howManyMines = fieldArray.filter(item => item.mine === 'on')
+      if (a !== undefined){this.surroundingCells.push(a)}
+      if (b !== undefined){this.surroundingCells.push(b)}
+      if (c !== undefined){this.surroundingCells.push(c)}
+      if (d !== undefined){this.surroundingCells.push(d)}
+      if (e !== undefined){this.surroundingCells.push(e)}
+      if (f !== undefined){this.surroundingCells.push(f)}
+      if (g !== undefined){this.surroundingCells.push(g)}
+      if (h !== undefined){this.surroundingCells.push(h)}
+      const howManyMines = this.surroundingCells.filter(item => item.mine === 'on')
       this.number = howManyMines.length
       if (howManyMines.length === 0 ) {
         this.gridPosition.innerText = ''
@@ -97,12 +105,23 @@ function init() {
       else {this.gridPosition.innerText = howManyMines.length
       }
     }    
+
+    autoOpen () {
+      if (this.state === 'clicked' && this.number === 0) {
+        this.surroundingCells.forEach(item => {
+          item.state = 'clicked'
+          item.gridPosition.style.backgroundColor = 'lightGrey'
+          item.number === 0 ? item.gridPosition.innerText = '' : item.gridPosition.innerText = item.number
+        })
+      }
+    }
+
     unclicked() {
       this.state = 'unclicked'
       this.gridPosition.innerText = ''
       this.gridPosition.style.backgroundColor = 'grey'
     } 
-  
+    
     clicked() {
       this.state = 'clicked'
       this.gridPosition.style.backgroundColor = 'lightGrey'
@@ -110,8 +129,18 @@ function init() {
         this.gridPosition.innerText = ''
         this.gridPosition.classList.add('mine')
       }
+      // this 'else if' is where the functionality will live for auto opening surrounding cells
       else if (this.number === 0) {
         this.gridPosition.innerText = ''
+        console.log(this.surroundingCells)
+        this.surroundingCells.forEach(item => {
+          item.state = 'clicked'
+          item.gridPosition.style.backgroundColor = 'lightGrey'
+          item.number === 0 ? item.gridPosition.innerText = '' : item.gridPosition.innerText = item.number
+          item.autoOpen()
+        })
+        // const checkForBlanks = this.surroundingCells.filter(item => item.number === 0)
+        // checkForBlanks.forEach(item => item.clicked())
       } 
       else {
         this.gridPosition.innerText = this.number
@@ -122,7 +151,7 @@ function init() {
  // instantiate objects to fill the grid (one for each cell). Also pushing objects to an array to open 
  // up more methods for manipulating the data later 
  for (let i = 0; i < gridSize; i++){
-   const cellObject = new Cell(document.getElementById(`${i}`), 'off', i, 'none', 'none', 'unclicked')
+   const cellObject = new Cell(document.getElementById(`${i}`), 'off', i, 'none', 'none', 'unclicked', [])
    objectArray.push(cellObject)
  }
  
@@ -173,8 +202,9 @@ function init() {
   }
   const mainGrid = remainingCells.map(item => objectArray[item])
 
-  // use each array to call the checkField method on its elements, passing the appriopriate parameters given the position of the elements on the grid. Corners is a bit awkward because each is different but the other arrays are uniform. 
-
+  // use each array to call the checkField method on its elements, passing the appriopriate parameters 
+  // given the position of the elements on the grid. In the checkField() method, these will be used to check 
+  // for mines and for blank squares in the surrounding field of a cell. 
   mainGrid.forEach(item => {
     item.checkField(item.up(), item.down(), item.left(), item.right(), item.dur(), item.dul(), item.ddl(), item.ddr())
   })
@@ -228,6 +258,26 @@ function handleLeftClick (event){
   const startTimer = () => setInterval(() => timer.innerText ++, 1000)
 
   grid.addEventListener('click', startTimer, { once: true })
+
+
+if (objectArray[33] === 'clicked') {
+  objectArray[33].surroundingCells.forEach(item => {
+    item.state = 'clicked'
+    item.gridPosition.style.backgroundColor = 'lightGrey'
+    item.number === 0 ? item.gridPosition.innerText = '' : item.gridPosition.innerText = item.number
+  })
+}
+
+  // build the auto open blank function 
+  
+
+  // function autoOpen(){
+  //   objectArray.forEach(item => {
+  //     if (item.number === 0){
+
+  //     }
+  //   })
+  // }
 
 
 
