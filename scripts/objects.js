@@ -6,7 +6,15 @@ function init() {
   const cellsArray = []
   const minesArray = []
   const objectArray = []
-  let flagsPlaced = 0
+  const mineCount = 12
+  let flagsPlaced = mineCount
+  let timer = document.querySelector('.timer')
+  timer.innerText = 0
+  const scoreBoard = document.querySelector('.scoreboard')
+  scoreBoard.innerText = mineCount
+  let clickCount = 0
+  const finalScore = timer.innerText / clickCount
+  
  
    // create a grid
    for (let i = 0; i < gridSize; i++){
@@ -28,24 +36,18 @@ function init() {
       this.state = state
     }
 
-    
     placeMine() {
-      this.gridPosition.classList.add('mine');
+      // this.gridPosition.classList.add('mine');
       this.gridPosition.innerText = ''
       this.mine = 'on' 
-      if (this.state === 'unclicked'){
-        this.gridPosition.classList.add('visability')
-      }
-      else if (this.state === 'clicked') 
-      {this.gridPosition.classList.remove('visability')}
     }
 
     placeFlag(){
       this.gridPosition.classList.add('flag')
       this.innerText = ''
       this.flag = 'on'
-      flagsPlaced ++
-      console.log(flagsPlaced)
+      flagsPlaced -= 1
+      scoreBoard.innerText = flagsPlaced
     }
     // methods for checking for mines in each direction of surrounding field, field is 8 squares around
     // allows for bespoke checking depending on position of the cell (corner, top row, side column etc.)
@@ -99,23 +101,23 @@ function init() {
       this.state = 'unclicked'
       this.gridPosition.innerText = ''
       this.gridPosition.style.backgroundColor = 'grey'
-      // if (this.gridPosition.classList.contains('mine'){
-      //   this.gridPosition.
-      // }
     } 
   
     clicked() {
       this.state = 'clicked'
       this.gridPosition.style.backgroundColor = 'lightGrey'
-      if (this.gridPosition.classList.contains('mine')){
+      if (this.mine === 'on'){
         this.gridPosition.innerText = ''
+        this.gridPosition.classList.add('mine')
       }
       else if (this.number === 0) {
         this.gridPosition.innerText = ''
       } 
-      else {this.gridPosition.innerText = this.number}
+      else {
+        this.gridPosition.innerText = this.number
+      }
+    }
   }
-}
   
  // instantiate objects to fill the grid (one for each cell). Also pushing objects to an array to open 
  // up more methods for manipulating the data later 
@@ -127,7 +129,7 @@ function init() {
   //randomly generate a number and push into array, call the placeMine method in corresponding objects
   // in the objectsArray
   function placeMines (){
-    for (let i = 0; i < 25; i++){
+    for (let i = 0; i < mineCount; i++){
       const randomNumber = Math.floor(Math.random() * objectArray.length)
       minesArray.push(randomNumber)
     }
@@ -203,18 +205,29 @@ function init() {
   // this is the way the game will start
   objectArray.forEach(item => item.unclicked())
 
-
+function handleLeftClick (event){
+    objectArray[event.target.id].clicked()
+    clickCount += 1
+}
 
   objectArray.forEach(item => {
-    item.gridPosition.addEventListener('click', event => objectArray[event.target.id].clicked())
+    item.gridPosition.addEventListener('click', handleLeftClick)
 })
   function handleRightClick(event) {
     event.preventDefault()
     objectArray[event.target.id].placeFlag()
+    clickCount += 1
   }
   objectArray.forEach(item => {
     item.gridPosition.addEventListener('contextmenu', handleRightClick)
 })
+
+
+
+  // build a simple second count timer 
+  const startTimer = () => setInterval(() => timer.innerText ++, 1000)
+
+  grid.addEventListener('click', startTimer, { once: true })
 
 
 

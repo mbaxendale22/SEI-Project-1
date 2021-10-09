@@ -1,8 +1,13 @@
 * {
   box-sizing: border-box;
 }
+
 .page-wrapper {
   display: flex;
+  margin: 0;
+  padding: 0;
+  flex-direction: column;
+  height: 95vh;
   justify-content: center;
   align-items: center;
 }
@@ -12,8 +17,8 @@
   display: flex;
   flex-wrap: wrap;
   justify-content: center;
-  height: 500px;
-  width: 500px;
+  height: 400px;
+  width: 400px;
   align-items: center;
   box-shadow: 0 0 20px 0 rgba(0, 0, 0, 0.2);
 }
@@ -30,7 +35,29 @@
   align-items: center;
   font-weight: bold;
 }
+.info-board {
+  display: flex;
+  justify-content: space-between;
+  width: 400px;
+  height: 50px;
+  /* border: 6px inset grey;
+  box-shadow: 5px 5px 15px rgba(0, 0, 0, 0.4); */
+  background-color: darkgray;
+}
 
+.scoreboard{
+  border: solid black;
+  width: 20%;
+}
+
+.emoji{
+  border: solid black;
+  width: 15%;
+}
+.timer{
+  border: solid black;
+  width: 20%;
+}
 
 
 /* Contents  */
