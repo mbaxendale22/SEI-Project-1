@@ -15,7 +15,7 @@ function init() {
   let width = 0
   let gridSize = 0
   const cellsArray = []
-  const minesArray = []
+  let minesArray = []
   const objectArray = []
   let clickedArray = []
   let mineCount = 0
@@ -61,10 +61,8 @@ function init() {
   //function to define the grid size & number of mines according to diffiuclty level
 
   function gameState(event) {
-    console.log(event.target)
     if (event.target.classList.contains('beginner-button')){ 
-      console.log('working')
-      mineCount = 2
+      mineCount = 10
       scoreBoard.innerText = mineCount
       width = 9
       gridSize = 81
@@ -104,7 +102,7 @@ function init() {
     beginnerButton.addEventListener('click', gameState)
     advancedButton.addEventListener('click', gameState)
     expertButton.addEventListener('click', gameState)
-    playAgain.addEventListener('click', () => location.reload())
+    playAgain.addEventListener('click', () => location.reload(true))
 
 
   function generateGame() {
@@ -129,7 +127,6 @@ function init() {
         this.flag = flag,
         this.surroundingCells = surroundingCells
       }
-
       placeMine() {
         // this.gridPosition.classList.add('mine');
         this.gridPosition.innerText = ''
@@ -264,16 +261,28 @@ function init() {
     }
 
     objectArray.forEach(item => item.unclicked())
-    //randomly generate a number and push into array, call the placeMine method in corresponding objects
-    // in the objectsArray
+    //randomly generate a number call the placeMine method in corresponding objects
+    // in the objectsArray, and avoid duplicates using set()
     function placeMines (){
-      for (let i = 0; i < mineCount; i++){
-        const randomNumber = Math.floor(Math.random() * objectArray.length)
-        console.log(objectArray.length)
-        minesArray.push(randomNumber)
-      }
+      const randomNumbers = new Set()
+      while (randomNumbers.size < mineCount) {
+        randomNumbers.add(Math.floor(Math.random() * objectArray.length))
+      } 
+      minesArray = Array.from(randomNumbers)
+      console.log(minesArray)
       minesArray.forEach(item => objectArray[item].placeMine())
-    }   
+    }
+
+
+
+
+      // for (let i = 0; i < mineCount; i++){
+      //   const randomNumber =  + 1
+      //   if (minesArray.indexOf(randomNumber) === -1 ) {
+      //     minesArray.push(randomNumber) }
+      //   console.log(minesArray)
+      // }
+    
   
     placeMines()
 
@@ -348,12 +357,12 @@ function init() {
     function handleLeftClick (event){
       objectArray[event.target.id].clicked()
       clickCount += 1
+      if (objectArray[event.target.id].mine === 'on'){
+        endGameLoss()
+      } 
       if (objectArray[event.target.id].number === 0){
         objectArray[event.target.id].surroundingCells.forEach(item => item.state = 'clicked')
       }
-      else if (objectArray[event.target.id].mine === 'on'){
-        endGameLoss()
-      } 
       objectArray.forEach(item => {
         if (item.state === 'clicked') {clickedArray.push(item)} 
       } )
