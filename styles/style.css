@@ -6,12 +6,14 @@ body {
   background: linear-gradient(to right, #355c7d, #6c5b7b, #c06c84);
 }
 
+/* Landing, choice of difficulties */
+
 .welcome-screen {
   display: flex;
   margin: 0;
   padding: 0;
   flex-direction: column;
-  height: 95vh;
+  height: 75vh;
   justify-content: center;
   align-items: center;
   color: white;
@@ -19,10 +21,12 @@ body {
 }
 
 .welcome-screen h1 {
-  font-size: clamp(32px, 64px, 72px)
+  font-size: clamp(32px, 64px, 72px);
+  animation: fadeIn 3s ease-in;
 }
 .welcome-screen p {
   font-size: 32px;
+  animation: fadeIn 4s ease-in;
 }
 
 .button-container {
@@ -48,6 +52,7 @@ body {
   font-family: 'Montserrat', sans-serif;
   padding: 10px;
   box-shadow: 1px 1px 1px 1px rgba(255,255,255,0.2);
+  animation: fadeIn 5s ease-in;
 }
 
 .button-container button:hover {
@@ -58,10 +63,10 @@ body {
 
 .page-wrapper {
   display: flex;
-  margin: 0;
+  margin-top: 64px;
   padding: 0;
   flex-direction: column;
-  height: 95vh;
+  height: 55vh;
   justify-content: center;
   align-items: center;
 }
@@ -77,6 +82,7 @@ body {
   box-shadow: 0 0 20px 0 rgba(0, 0, 0, 0.2);
 }
 
+/* cell size based on difficulty level  */
 
 .beginner-cells {
   border: 1px solid darkgray;
@@ -154,11 +160,48 @@ body {
   background-repeat: no-repeat;
 }
 
+/* end game and reset options styling */
 
-.blank{}
+.end-game {
+  font-family: 'Montserrat', sans-serif;
+  font-size: 24px;
+  height: 12vh;
+  text-align: center;
+  color: white;
+}
 
-/* States  */
-/* 
-.unrevealed {
-  background: grey;
-} */
+.play-again {
+  display: flex;
+  justify-content: center;
+}
+
+.play-again {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 10px;
+    width: 25%;
+    height: 5vh;
+    color: white;
+    font-size: clamp(14px, 1.4vw, 24px);
+    background: transparent;
+    border: solid 2px white;
+    font-family: 'Montserrat', sans-serif;
+    padding: 10px;
+    box-shadow: 1px 1px 1px 1px rgba(255,255,255,0.2);
+    margin: 50px auto;
+    animation: fadeIn 5s;
+  }
+  
+  .play-again:hover {
+    box-shadow: 1px 1px 1px 1px rgba(255,255,255,0.7);
+    font-weight: bold;
+    font-style: italic
+  } 
+
+
+
+@keyframes fadeIn {
+  0% {opacity: 0;}
+  100% {opacity: 1}
+}
