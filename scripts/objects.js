@@ -10,8 +10,10 @@ function init() {
   const advancedButton = document.querySelector('.advanced-button')
   const expertButton = document.querySelector('.expert-button')
   const endGameMessage = document.querySelector('.end-game')
-  const gameOver = document.createElement('h1')
+  const finalMessage = document.createElement('h1')
   const playAgain = document.querySelector('.play-again')
+  const winner = document.querySelector('.winner')
+
   let width = 0
   let gridSize = 0
   const cellsArray = []
@@ -22,7 +24,7 @@ function init() {
   let flagsPlaced = 0
   timer.innerText = 0
   let clickCount = 0
-  const finalScore = timer.innerText / clickCount
+  let finalScore = 0
 
   // functions that define different states of the game
   
@@ -37,21 +39,23 @@ function init() {
       item.clicked()
       if (item.gridPosition.classList.contains('flag')) {item.gridPosition.classList.remove('flag')}
     })
-    
     clearInterval(1)
-    gameOver.innerText = 'Game Over'
-    endGameMessage.appendChild(gameOver)
+    finalMessage.innerText = 'Game Over'
+    endGameMessage.appendChild(finalMessage)
     playAgain.style.display = 'flex'
-    gameOver.style.animation = 'fadeIn 4s'
+    finalMessage.style.animation = 'fadeIn 4s'
     
   }
 
   function endGameWin() {
     objectArray.forEach(item => item.clicked())
-    gameOver.innerText = 'Victory!'
-    gameOver.style.animation = 'fadeIn 3s'
-    endGameMessage.appendChild(gameOver)
+    finalMessage.innerText = 'Victory!'
+    finalMessage.style.animation = 'fadeIn 3s'
+    endGameMessage.appendChild(finalMessage)
+    winner.style.display = 'flex'
     playAgain.style.display = 'flex'
+    // yourScore.innerText = `Your final score is ${finalScore}`
+
     //need to add a score in here
   }
 
@@ -62,7 +66,7 @@ function init() {
 
   function gameState(event) {
     if (event.target.classList.contains('beginner-button')){ 
-      mineCount = 10
+      mineCount = 0
       scoreBoard.innerText = mineCount
       width = 9
       gridSize = 81
@@ -71,6 +75,7 @@ function init() {
       grid.style.width = '400px'
       welcomeScreen.classList.add('hide')
       pageWrapper.classList.remove('hide')
+      finalScore = Math.ceil(timer.innerText / 1.2)
       generateGame()
     }   
     else if (event.target.classList.contains('advanced-button')){
@@ -83,6 +88,7 @@ function init() {
       grid.style.width = '500px'
       welcomeScreen.classList.add('hide')
       pageWrapper.classList.remove('hide')
+      finalScore = Math.ceil(timer.innerText / 1.5)
       generateGame()
     }
     else if (event.target.classList.contains('expert-button')) {
@@ -91,10 +97,11 @@ function init() {
       width = 24
       scoreBoard.innerText = mineCount
       gridSize = 576
-      grid.style.height = '600px'
+      grid.style.height = '500px'
       grid.style.width = '600px'
       welcomeScreen.classList.add('hide')
       pageWrapper.classList.remove('hide')
+      finalScore = Math.ceil(timer.innerText / 2)
       generateGame()
     } 
   }
@@ -201,12 +208,12 @@ function init() {
       unclicked() {
         this.state = 'unclicked'
         this.gridPosition.innerText = ''
-        this.gridPosition.style.backgroundColor = 'grey'
+        this.gridPosition.style.backgroundColor = 'rgba(93, 65, 87, 1)'
       } 
       clicked() {
         if (this.mine === 'on'){
           this.state = 'clicked'
-          this.gridPosition.style.backgroundColor = 'lightGrey'
+          this.gridPosition.style.backgroundColor = 'rgba(168, 202, 186, 0.8)'
           this.gridPosition.innerText = ''
           this.gridPosition.classList.add('mine')
         }
@@ -214,17 +221,17 @@ function init() {
         else if (this.number === 0) {
           this.state = 'clicked'
           this.gridPosition.innerText = ''
-          this.gridPosition.style.backgroundColor = 'lightGrey'
+          this.gridPosition.style.backgroundColor = 'rgba(168, 202, 186, 0.5)'
           this.surroundingCells.forEach(item => {
             if (item.mine === 'off') {
-              item.gridPosition.style.backgroundColor = 'lightGrey'
+              item.gridPosition.style.backgroundColor = 'rgba(168, 202, 186, 0.5)'
               item.number === 0 ? item.gridPosition.innerText = '' : item.gridPosition.innerText = item.number
               item.state = 'clicked'
             }
             if (item.number === 0) {
               item.surroundingCells.forEach(item => {
                 if (item.mine === 'off') {
-                  item.gridPosition.style.backgroundColor = 'lightGrey'
+                  item.gridPosition.style.backgroundColor = 'rgba(168, 202, 186, 0.5)'
                   item.number === 0 ? item.gridPosition.innerText = '' : item.gridPosition.innerText = item.number
                   item.state = 'clicked'
                 }
@@ -235,7 +242,7 @@ function init() {
         else if (this.number > 0) {
           this.state = 'clicked'
           this.gridPosition.innerText = this.number
-          this.gridPosition.style.backgroundColor = 'lightGrey'
+          this.gridPosition.style.backgroundColor = 'rgba(168, 202, 186, 0.5)'
         }
       }     
     }
@@ -272,17 +279,6 @@ function init() {
       console.log(minesArray)
       minesArray.forEach(item => objectArray[item].placeMine())
     }
-
-
-
-
-      // for (let i = 0; i < mineCount; i++){
-      //   const randomNumber =  + 1
-      //   if (minesArray.indexOf(randomNumber) === -1 ) {
-      //     minesArray.push(randomNumber) }
-      //   console.log(minesArray)
-      // }
-    
   
     placeMines()
 

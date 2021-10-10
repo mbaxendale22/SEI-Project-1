@@ -3,7 +3,8 @@
 }
 
 body {
-  background: linear-gradient(to right, #355c7d, #6c5b7b, #c06c84);
+  /* background: linear-gradient(to right, #355c7d, #6c5b7b, #c06c84); */
+  background: linear-gradient(to right, #5d4157, #a8caba);
 }
 
 /* Landing, choice of difficulties */
@@ -65,7 +66,7 @@ body {
   display: flex;
   margin-top: 64px;
   padding: 0;
-  flex-direction: column;
+  flex-direction: row;
   height: 55vh;
   justify-content: center;
   align-items: center;
@@ -85,8 +86,11 @@ body {
 /* cell size based on difficulty level  */
 
 .beginner-cells {
-  border: 1px solid darkgray;
+  border: 1px solid white;
+  opacity: 0.8;
+  box-shadow: 5px 5px 15px rgba(0, 0, 0, 0.4);
   flex-grow: 1;
+  border-radius: 5px;
   height: 11.11111111111%;
   width: 11.111111111111%;
   font-size: 15px;
@@ -97,6 +101,7 @@ body {
 }
 .advanced-cells {
   border: 1px solid darkgray;
+  border-radius: 5px;
   flex-grow: 1;
   height: 6.25%;
   width: 6.25%;
@@ -108,6 +113,7 @@ body {
 }
 .expert-cells {
   border: 1px solid darkgray;
+  border-radius: 5px;
   flex-grow: 1;
   height: 4.166666666666%;
   width: 4.1666666666666%;
@@ -118,13 +124,15 @@ body {
   font-weight: bold;
 }
 .info-board {
-  display: flex;
+  display: none;
   justify-content: space-between;
+  margin-bottom: 500px;
   width: 400px;
   height: 50px;
   /* border: 6px inset grey;
   box-shadow: 5px 5px 15px rgba(0, 0, 0, 0.4); */
-  background-color: darkgray;
+  background: transparent;
+  border: solid black;
 }
 
 .scoreboard{
@@ -198,6 +206,28 @@ body {
     font-weight: bold;
     font-style: italic
   } 
+
+  .winner {
+    display: none;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    margin-right: 200px;
+    width: 25vw;
+    height: 45vh;
+    flex-direction: column;
+    color: white;
+    animation: fadeIn 3s ease-in;
+    font-family: 'Montserrat', sans-serif;
+  }
+
+  .winner h1 {
+  font-size: clamp(32px, 50px, 72px);
+  }
+
+  .winner p{
+    font-size: clamp(16px, 24px, 46px);
+  }
 
 
 
