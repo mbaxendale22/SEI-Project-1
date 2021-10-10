@@ -1,90 +1,102 @@
 function init() {
-  
+   
   //variables
-  let stage = 1
   const grid = document.querySelector('.grid-container')
-  let timer = document.querySelector('.timer')
-  const scoreBoard = document.querySelector('.scoreboard')
-  const welcomeScreen = document.querySelector('.welcome-screen')
-  const pageWrapper = document.querySelector('.page-wrapper')
-  const beginnerButton = document.querySelector('.beginner-button')
-  const advancedButton = document.querySelector('.advanced-button')
-  const expertButton = document.querySelector('.expert-button')
-  let width = 0
-  let gridSize = 0
   const cellsArray = []
   const minesArray = []
   const objectArray = []
-  let mineCount = 0
+  let mineCount = 12
   let flagsPlaced = mineCount
+  let timer = document.querySelector('.timer')
   timer.innerText = 0
+  const scoreBoard = document.querySelector('.scoreboard')
+  scoreBoard.innerText = mineCount
   let clickCount = 0
   const finalScore = timer.innerText / clickCount
-  
-  
-  if (stage === 1) {
-    welcomeScreen.classList.remove('hide')
-    pageWrapper.classList.add('hide')
-  }
-  // else if (stage === 2) {
-  //   welcomeScreen.classList.add('hide')
-  //   pageWrapper.classList.remove('hide')
-  // }
-  
-  // this will be attached to an event listener on choosing the game mode
 
-  function gameState(event) {
-    console.log(event.target)
-    if (event.target.classList.contains('beginner-button')){ 
-      console.log('working')
-      mineCount = 12
-      scoreBoard.innerText = mineCount
-      width = 9
-      gridSize = 81
-      grid.style.height = '400px'
-      grid.style.width = '400px'
-      welcomeScreen.classList.add('hide')
-      pageWrapper.classList.remove('hide')
-      generateGame()
-    }   
-    else if (event.target.classList.contains('advanced-button')){
-      mineCount = 40
-      scoreBoard.innerText = mineCount
-      width = 16
-      gridSize = 256
-      grid.style.height = '500px'
-      grid.style.width = '500px'
-      welcomeScreen.classList.add('hide')
-      pageWrapper.classList.remove('hide')
-      generateGame()
+  const gameManagement = {
+    start: 'on',
+    end: 'off',
+    beginner: 'on',
+    intermediate: 'off',
+    expert: 'off',
+    width: 9,
+    gridSize: 81,
+    createGrid() {
+      for (let i = 0; i < gridSize; i++){
+        const cell = document.createElement('div')
+        cell.setAttribute('id', `${i}`)
+        cell.innerText = i
+        grid.appendChild(cell)
+        cellsArray.push(cell)
+      }
+    },
+    play(difficulty){
+      this.start = 'on'
+      this.end = 'off'
+      if (difficulty === 'beginner'){ 
+        mineCount = 12
+        this.width = 9
+        this.gridSize = 81
+        objectArray.forEach(item => {
+          item.gridPosition.classList.remove('advanced-cells')
+        })
+        objectArray.forEach(item => {
+          item.gridPosition.classList.remove('expert-cells')
+        })
+        objectArray.forEach(item => {
+          item.gridPosition.classList.add('beginner-cells')
+        })
+        console.log(objectArray[55].gridPosition.classList)
+        console.log(grid.classList)
+      }
+      else if (difficulty === 'advanced'){
+        mineCount = 40
+        this.width = 16
+        this.gridSize = 256
+        objectArray.forEach(item => {
+          objectArray.forEach(item => {
+            item.gridPosition.classList.add('advanced-cells')
+          })
+          item.gridPosition.classList.remove('beginner-cells')
+        })
+        objectArray.forEach(item => {
+          item.gridPosition.classList.remove('expert-cells')
+        })
+        console.log(objectArray[55].gridPosition.classList)
+        console.log(grid.classList)
+      }
+      else if (difficulty === 'expert') {
+        mineCount = 115
+        this.width = 24
+        this.gridSize = 576
+        objectArray.forEach(item => {
+          item.gridPosition.classList.remove('beginner-cells')
+        })
+        objectArray.forEach(item => {
+          item.gridPosition.classList.remove('advanced-cells')
+        })
+        objectArray.forEach(item => {
+          item.gridPosition.classList.add('expert-cells')
+        })
+      } 
     }
-    else if (event.target.classList.contains('expert-button')) {
-      mineCount = 115
-      width = 24
-      scoreBoard.innerText = mineCount
-      gridSize = 576
-      grid.style.height = '600px'
-      grid.style.width = '600px'
-      welcomeScreen.classList.add('hide')
-      pageWrapper.classList.remove('hide')
-      generateGame()
-    } 
   }
-    beginnerButton.addEventListener('click', gameState)
-    advancedButton.addEventListener('click', gameState)
-    expertButton.addEventListener('click', gameState)
+      let width = gameManagement.width
+    let gridSize = gameManagement.gridSize
+    gameManagement.createGrid()
+    gameManagement.play('advanced')
+    console.log(gameManagement.width)
+    console.log(gameManagement.gridSize)
 
-
-  function generateGame() {
-  
-  // create a grid
-  for (let i = 0; i < gridSize; i++){
-    const cell = document.createElement('div')
-    cell.setAttribute('id', `${i}`)
-    cell.innerText = i
-    grid.appendChild(cell)
-    cellsArray.push(cell)
-  }
+   // create a grid
+  //  for (let i = 0; i < gridSize; i++){
+  //   const cell = document.createElement('div')
+  //   cell.setAttribute('id', `${i}`)
+  //   cell.innerText = i
+  //   grid.appendChild(cell)
+  //   cellsArray.push(cell)
+  // }
   // class for constructing cell objects, calling methods on which will define the behaviour of each cell
   // and ultimately the game.
   class Cell {
@@ -158,17 +170,6 @@ function init() {
       else {this.gridPosition.innerText = howManyMines.length
       }
     }    
-
-    // autoOpen () {
-    //   if (this.state === 'clicked' && this.number === 0) {
-    //     this.surroundingCells.forEach(item => {
-    //       if (this.state === 'clicked' && this.mine === 'off') {
-    //       item.gridPosition.style.backgroundColor = 'lightGrey'
-    //       item.number === 0 ? item.gridPosition.innerText = '' : item.gridPosition.innerText = item.number
-    //     }})
-    //   }
-    // }
-
     unclicked() {
       this.state = 'unclicked'
       this.gridPosition.innerText = ''
@@ -208,25 +209,16 @@ function init() {
     }
   }
   
+  
  // instantiate objects to fill the grid (one for each cell). Also pushing objects to an array to open 
  // up more methods for manipulating the data later 
- // add the correct class for the mode 
-
  for (let i = 0; i < gridSize; i++){
    const cellObject = new Cell(document.getElementById(`${i}`), 'off', i, 'none', 'none', 'unclicked', [])
-    switch (gridSize) {
-      case 81:
-        cellObject.gridPosition.classList.add('beginner-cells');
-        break;
-      case 256: 
-        cellObject.gridPosition.classList.add('advanced-cells');
-        break;
-      case 576:
-        cellObject.gridPosition.classList.add('expert-cells');
-        break;
-    }
+   cellObject.gridPosition.classList.add('advanced-cells')
+   console.log(gridSize)
    objectArray.push(cellObject)
-  }
+ }
+
 
 
   //randomly generate a number and push into array, call the placeMine method in corresponding objects
@@ -234,7 +226,6 @@ function init() {
   function placeMines (){
     for (let i = 0; i <= mineCount; i++){
       const randomNumber = Math.floor(Math.random() * objectArray.length)
-      console.log(objectArray.length)
       minesArray.push(randomNumber)
     }
     minesArray.forEach(item => objectArray[item].placeMine())
@@ -310,7 +301,7 @@ function init() {
   // this is the way the game will start
   objectArray.forEach(item => item.unclicked())
 
-  function handleLeftClick (event){
+function handleLeftClick (event){
     objectArray[event.target.id].clicked()
     clickCount += 1
 }
@@ -334,8 +325,40 @@ function init() {
 
   grid.addEventListener('click', startTimer, { once: true })
 
-}
+
+//   let zeroCellsArray = []
+// function test () {
+//       if (objectArray[55].number === 0) {
+//         zeroCellsArray.push(objectArray[55].surroundingCells)
+//         console.log(zeroCellsArray)
+//        const xCellsArray = zeroCellsArray.forEach(item => {
+//          if (item.number === 0) {console.log(item)}
+//        })
+//       }
+//     }
+
+//     test()
+
+    // console.log(objectArray[55].number)
 
 
+  
+  
+
+
+    
+    
+    
+    
+    
+
+
+
+
+
+ 
+
+ 
+ 
 }
  window.addEventListener('DOMContentLoaded', init)

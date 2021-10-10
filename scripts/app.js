@@ -1,7 +1,7 @@
 function init () {
 
   const grid = document.querySelector('.grid-container')
-  const width = 10
+  const width = 9
   const gridSize = width * width
   const cellsArray = []
   const minesArray = []
