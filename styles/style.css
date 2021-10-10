@@ -3,7 +3,7 @@
 }
 
 body {
-  background: linear-gradient(to right, #355c7d, #6c5b7b, #c06c84)
+  background: linear-gradient(to right, #355c7d, #6c5b7b, #c06c84);
 }
 
 .welcome-screen {
@@ -15,7 +15,46 @@ body {
   justify-content: center;
   align-items: center;
   color: white;
+  font-family: 'Montserrat', sans-serif;
 }
+
+.welcome-screen h1 {
+  font-size: clamp(32px, 64px, 72px)
+}
+.welcome-screen p {
+  font-size: 32px;
+}
+
+.button-container {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  width: 35vw;
+  min-width: 350px;
+  margin: 32px;
+}
+
+.button-container button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 10px;
+  width: 25%;
+  height: 5vh;
+  color: white;
+  font-size: clamp(14px, 1.4vw, 24px);
+  background: transparent;
+  border: solid 2px white;
+  font-family: 'Montserrat', sans-serif;
+  padding: 10px;
+  box-shadow: 1px 1px 1px 1px rgba(255,255,255,0.2);
+}
+
+.button-container button:hover {
+  box-shadow: 1px 1px 1px 1px rgba(255,255,255,0.7);
+  font-weight: bold;
+  font-style: italic
+} 
 
 .page-wrapper {
   display: flex;
