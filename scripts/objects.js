@@ -116,30 +116,112 @@ function init() {
       generateGame()
     } 
   }
-
-    beginnerButton.addEventListener('click', gameState)
-    advancedButton.addEventListener('click', gameState)
-    expertButton.addEventListener('click', gameState)
-    playAgain.addEventListener('click', () => location.reload(true))
-
-
-  function generateGame() {
-
-    function autoFlood(target) {
-      if (target.mine === 'on' || target.number > 0) {
-        console.log('stopped recursion')
-        return
-      }
-      else {
-        target.gridPosition.style.backgroundColor = 'orange'
-        target.clicked()
-        if (!topRow.includes(target.surroundingCells[0]) && !bottomRow.includes(target.surroundingCells[0]))
-        {autoFlood(target.surroundingCells[0])}
-        console.log(target.surroundingCells[0])
-        console.log('still using recursion')
-      }
-    }
   
+  beginnerButton.addEventListener('click', gameState)
+  advancedButton.addEventListener('click', gameState)
+  expertButton.addEventListener('click', gameState)
+  playAgain.addEventListener('click', () => location.reload(true))
+  
+  
+  function generateGame() {
+    // if (!leftColumn.includes(target)) {
+    // let nextCell = objectArray[target.identifier - 1]
+    // console.log(target.identifier)
+    // autoFlood(nextCell)
+    // }
+    // if (!rightColumn.includes(target)) {
+    // let nextCell = objectArray[target.identifier + 1 -width]
+    // console.log(target.identifier)
+    // autoFlood(nextCell)
+    // }
+    // if (target.identifier > 8 && !rightColumn.includes(target)) {
+    // let nextCell = objectArray[target.identifier -width]
+    // console.log(target.identifier)
+    // autoFlood(nextCell)
+    // }
+    // if (target.identifier > 9) {
+    // let nextCell = objectArray[target.identifier - width]
+    // console.log(target.identifier)
+    // autoFlood(nextCell)
+    // }
+    // if (target.identifier > 10 && !leftColumn.includes(target)) {
+    // let nextCell = objectArray[target.identifier -width]
+    // console.log(target.identifier)
+    // autoFlood(nextCell)
+    // }
+    // if (target.identifier < 79 && !rightColumn.includes(target)) {
+    // let nextCell = objectArray[target.identifier + 1]
+    // console.log(target.identifier)
+    // autoFlood(nextCell)
+    // }
+    // if (target.identifier < 72 && !leftColumn.includes(target)) {
+    // let nextCell = objectArray[target.identifier - 1 + width]
+    // console.log(target.identifier)
+    // autoFlood(nextCell)
+    // }
+    // if (target.identifier < 70 && !rightColumn.includes(target)) {
+    // let nextCell = objectArray[target.identifier + 1 + width]
+    // console.log(target.identifier)
+    // autoFlood(nextCell)
+    // }
+    // if (target.identifier < 71) {
+    // let nextCell = objectArray[target.identifier + width]
+    // console.log(target.identifier)
+    // autoFlood(nextCell)
+    // }
+
+
+  // I can't seem to use 'surrounding cells' to complete this function, it maxes out the call stack
+  // when I iterate through each item in the array 
+
+  
+  function autoFlood(target) {
+    console.log(target)
+    if (target.mine === 'off') {
+    target.clicked()
+    if (corners.some(item => item === objectArray[target.identifier])) {return}
+    else if (!corners.includes(objectArray[target.identifier]) && !leftColumn.includes(objectArray[target.identifier])) {
+      autoFlood(objectArray[target.identifier -1])
+    }
+    // if (!corners.includes(objectArray[target.identifier]) && !rightColumn.includes(objectArray[target.identifier])) {
+    //   autoFlood(objectArray[target.identifier + width])
+    // }
+    if (!rightColumn.includes(objectArray[target.identifier])) {
+      autoFlood(objectArray[target.identifier - width + 1])
+    }
+    
+    if (!bottomRow.includes(objectArray[target.identifier])) {
+      autoFlood(objectArray[target.identifier + width])
+    }
+    if (!rightColumn.some(item => item === objectArray[target.identifier])) {
+      autoFlood(objectArray[target.identifier + 1])
+    }
+
+
+
+
+   
+    }
+  }
+   
+
+    //     if (leftColumn.includes(target)) {
+    //       let nextCell = objectArray[target.identifier + 1 - width]
+    //       autoFlood(nextCell)
+    //       return
+    //     }
+    //     if (rightColumn.includes(target)) {
+    //       let nextCell = objectArray[target.identifier -1]
+    //       autoFlood(nextCell)
+    //       return
+    //     }
+    //     if (mainGrid.includes(target)) {
+    //       let nextCell = objectArray[target.identifier -1]
+    //       autoFlood(nextCell)
+    //       return
+    //     }
+    // }
+    
     // create a grid
     for (let i = 0; i < gridSize; i++){
       const cell = document.createElement('div')
@@ -226,16 +308,19 @@ function init() {
         this.gridPosition.style.backgroundColor = 'rgba(93, 65, 87, 1)'
       } 
       clicked() {
+        console.log(this.gridPosition)
         if (this.mine === 'on'){
           this.state = 'clicked'
           this.gridPosition.style.backgroundColor = 'rgba(168, 202, 186, 0.8)'
           this.gridPosition.innerText = ''
           this.gridPosition.classList.add('mine')
+          return
         }
         else if (this.number > 0) {
           this.state = 'clicked'
           this.gridPosition.innerText = this.number
           this.gridPosition.style.backgroundColor = 'rgba(168, 202, 186, 0.5)'
+          return
         }
         // this 'else if' is where the functionality will live for auto opening surrounding cells
         else if (this.number === 0) {
@@ -244,14 +329,6 @@ function init() {
           this.gridPosition.style.backgroundColor = 'rgba(168, 202, 186, 0.5)'
         } 
       }
-          // console.log(this.surroundingCells)
-          // this.surroundingCells.forEach(item => {
-          //   if (item.mine === 'off') {
-          //     item.clicked()
-              // item.gridPosition.style.backgroundColor = 'rgba(168, 202, 186, 0.5)'
-              // item.number === 0 ? item.gridPosition.innerText = '' : item.gridPosition.innerText = item.number
-            // }
-          // })   
     }
       
       // instantiate objects to fill the grid (one for each cell). Also pushing objects to an array to open 
@@ -351,6 +428,9 @@ function init() {
       if (item === corners[3]){item.checkField(item.up(), item.left(), item.dur())}
     }) 
 
+ 
+   
+
     //event listeners
 
     // this is the way the game will start
@@ -358,12 +438,12 @@ function init() {
 
     function handleLeftClick (event){
       objectArray[event.target.id].clicked()
-      clickCount += 1
-      if (objectArray[event.target.id].mine === 'on'){
+      if (objectArray[event.target.id].mine === 'on') {
         endGameLoss()
       } 
       if (objectArray[event.target.id].number === 0){
-        objectArray[event.target.id].surroundingCells.forEach(item => item.clicked(item))
+        // objectArray[event.target.id].surroundingCells.forEach(item => item.clicked())
+        // objectArray[event.target.id].surroundingCells.forEach(item => autoFlood(item))
         autoFlood(objectArray[event.target.id])
       }
       objectArray.forEach(item => {
@@ -372,10 +452,12 @@ function init() {
       clickedArray.length === (gridSize - mineCount) ? endGameWin() : clickedArray = []
     }
 
-    
+
+
     objectArray.forEach(item => {
       item.gridPosition.addEventListener('click', handleLeftClick)
     })
+
     function handleRightClick(event) {
       event.preventDefault()
       objectArray[event.target.id].placeFlag()
@@ -385,14 +467,14 @@ function init() {
       item.gridPosition.addEventListener('contextmenu', handleRightClick)
     })
     
-      // build a simple second count timer 
+      // build a second count timer & attach it to an eventlistener, make sure it triggers only once
     function startTimer () {
       let timerInterval = setInterval(() => timer.innerText ++, 1000)
-    }
-    
+    } 
     
     grid.addEventListener('click', startTimer, { once: true })
 
   }
+
 }
  window.addEventListener('DOMContentLoaded', init)
