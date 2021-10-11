@@ -14,6 +14,7 @@ function init() {
   const playAgain = document.querySelector('.play-again')
   const winner = document.querySelector('.winner')
   let mineDensity = 0
+  let counter = 0
 
   let width = 0
   let gridSize = 0
@@ -73,7 +74,7 @@ function init() {
 
   function gameState(event) {
     if (event.target.classList.contains('beginner-button')){ 
-      mineCount = 0
+      mineCount = 5
       mineDisplay.innerText = mineCount
       width = 9
       gridSize = 81
@@ -123,6 +124,21 @@ function init() {
 
 
   function generateGame() {
+
+    function autoFlood(target) {
+      if (target.mine === 'on' || target.number > 0) {
+        console.log('stopped recursion')
+        return
+      }
+      else {
+        target.gridPosition.style.backgroundColor = 'orange'
+        target.clicked()
+        if (!topRow.includes(target.surroundingCells[0]) && !bottomRow.includes(target.surroundingCells[0]))
+        {autoFlood(target.surroundingCells[0])}
+        console.log(target.surroundingCells[0])
+        console.log('still using recursion')
+      }
+    }
   
     // create a grid
     for (let i = 0; i < gridSize; i++){
@@ -203,18 +219,7 @@ function init() {
         }
         else {this.gridPosition.innerText = howManyMines.length
         }
-      }    
-
-      // autoOpen () {
-      //   if (this.state === 'clicked' && this.number === 0) {
-      //     this.surroundingCells.forEach(item => {
-      //       if (this.state === 'clicked' && this.mine === 'off') {
-      //       item.gridPosition.style.backgroundColor = 'lightGrey'
-      //       item.number === 0 ? item.gridPosition.innerText = '' : item.gridPosition.innerText = item.number
-      //     }})
-      //   }
-      // }
-
+      }
       unclicked() {
         this.state = 'unclicked'
         this.gridPosition.innerText = ''
@@ -227,34 +232,26 @@ function init() {
           this.gridPosition.innerText = ''
           this.gridPosition.classList.add('mine')
         }
-        // this 'else if' is where the functionality will live for auto opening surrounding cells
-        else if (this.number === 0) {
-          this.state = 'clicked'
-          this.gridPosition.innerText = ''
-          this.gridPosition.style.backgroundColor = 'rgba(168, 202, 186, 0.5)'
-          this.surroundingCells.forEach(item => {
-            if (item.mine === 'off') {
-              item.gridPosition.style.backgroundColor = 'rgba(168, 202, 186, 0.5)'
-              item.number === 0 ? item.gridPosition.innerText = '' : item.gridPosition.innerText = item.number
-              item.state = 'clicked'
-            }
-            if (item.number === 0) {
-              item.surroundingCells.forEach(item => {
-                if (item.mine === 'off') {
-                  item.gridPosition.style.backgroundColor = 'rgba(168, 202, 186, 0.5)'
-                  item.number === 0 ? item.gridPosition.innerText = '' : item.gridPosition.innerText = item.number
-                  item.state = 'clicked'
-                }
-              })
-            }
-          }
-          )}
         else if (this.number > 0) {
           this.state = 'clicked'
           this.gridPosition.innerText = this.number
           this.gridPosition.style.backgroundColor = 'rgba(168, 202, 186, 0.5)'
         }
-      }     
+        // this 'else if' is where the functionality will live for auto opening surrounding cells
+        else if (this.number === 0) {
+          this.state = 'clicked'
+          this.gridPosition.innerText = ''
+          this.gridPosition.style.backgroundColor = 'rgba(168, 202, 186, 0.5)'
+        } 
+      }
+          // console.log(this.surroundingCells)
+          // this.surroundingCells.forEach(item => {
+          //   if (item.mine === 'off') {
+          //     item.clicked()
+              // item.gridPosition.style.backgroundColor = 'rgba(168, 202, 186, 0.5)'
+              // item.number === 0 ? item.gridPosition.innerText = '' : item.gridPosition.innerText = item.number
+            // }
+          // })   
     }
       
       // instantiate objects to fill the grid (one for each cell). Also pushing objects to an array to open 
@@ -286,7 +283,6 @@ function init() {
         randomNumbers.add(Math.floor(Math.random() * objectArray.length))
       } 
       minesArray = Array.from(randomNumbers)
-      console.log(minesArray)
       minesArray.forEach(item => objectArray[item].placeMine())
     }
   
@@ -367,11 +363,12 @@ function init() {
         endGameLoss()
       } 
       if (objectArray[event.target.id].number === 0){
-        objectArray[event.target.id].surroundingCells.forEach(item => item.state = 'clicked')
+        objectArray[event.target.id].surroundingCells.forEach(item => item.clicked(item))
+        autoFlood(objectArray[event.target.id])
       }
       objectArray.forEach(item => {
         if (item.state === 'clicked') {clickedArray.push(item)} 
-      } )
+      })
       clickedArray.length === (gridSize - mineCount) ? endGameWin() : clickedArray = []
     }
 
@@ -397,15 +394,5 @@ function init() {
     grid.addEventListener('click', startTimer, { once: true })
 
   }
-
-
 }
  window.addEventListener('DOMContentLoaded', init)
-
-
-
-          // objectArray.forEach(item => {
-          //   if (item.status === 'clicked') {
-          //     clickedArray.push(item) 
-          //   }}) 
-          // console.log(clickedArray)
