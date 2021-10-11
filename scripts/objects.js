@@ -3,7 +3,7 @@ function init() {
   //variables
   const grid = document.querySelector('.grid-container')
   let timer = document.querySelector('.timer')
-  const scoreBoard = document.querySelector('.scoreboard')
+  const mineDisplay = document.querySelector('.mine-display')
   const welcomeScreen = document.querySelector('.welcome-screen')
   const pageWrapper = document.querySelector('.page-wrapper')
   const beginnerButton = document.querySelector('.beginner-button')
@@ -13,6 +13,7 @@ function init() {
   const finalMessage = document.createElement('h1')
   const playAgain = document.querySelector('.play-again')
   const winner = document.querySelector('.winner')
+  let mineDensity = 0
 
   let width = 0
   let gridSize = 0
@@ -44,6 +45,9 @@ function init() {
     endGameMessage.appendChild(finalMessage)
     playAgain.style.display = 'flex'
     finalMessage.style.animation = 'fadeIn 4s'
+    timer.style.display = 'none'
+    mineDisplay.style.display = 'none'
+    grid.style.height = '400px'
     
   }
 
@@ -54,9 +58,12 @@ function init() {
     endGameMessage.appendChild(finalMessage)
     winner.style.display = 'flex'
     playAgain.style.display = 'flex'
-    // yourScore.innerText = `Your final score is ${finalScore}`
+    timer.style.display = 'none'
+    mineDisplay.style.display = 'none'
+    grid.style.height = '400px'
+    winner.lastElementChild.innerText = `You found the mines in ${timer.innerText} seconds
 
-    //need to add a score in here
+    Your final score is ${Math.round(timer.innerText / mineDensity)}`
   }
 
   gameReset()
@@ -67,7 +74,7 @@ function init() {
   function gameState(event) {
     if (event.target.classList.contains('beginner-button')){ 
       mineCount = 0
-      scoreBoard.innerText = mineCount
+      mineDisplay.innerText = mineCount
       width = 9
       gridSize = 81
       flagsPlaced = mineCount
@@ -75,33 +82,36 @@ function init() {
       grid.style.width = '400px'
       welcomeScreen.classList.add('hide')
       pageWrapper.classList.remove('hide')
-      finalScore = Math.ceil(timer.innerText / 1.2)
+      mineDensity = 1.2
+      // finalScore = Math.ceil(timer.innerText / 1.2)
       generateGame()
     }   
     else if (event.target.classList.contains('advanced-button')){
       mineCount = 40
       flagsPlaced = mineCount
-      scoreBoard.innerText = mineCount
+      mineDisplay.innerText = mineCount
       width = 16
       gridSize = 256
       grid.style.height = '500px'
       grid.style.width = '500px'
       welcomeScreen.classList.add('hide')
       pageWrapper.classList.remove('hide')
-      finalScore = Math.ceil(timer.innerText / 1.5)
+      // finalScore = Math.ceil(timer.innerText / 1.5)
+      mineDensity = 1.5
       generateGame()
     }
     else if (event.target.classList.contains('expert-button')) {
       mineCount = 115
       flagsPlaced = mineCount
       width = 24
-      scoreBoard.innerText = mineCount
+      mineDisplay.innerText = mineCount
       gridSize = 576
-      grid.style.height = '500px'
+      grid.style.height = '600px'
       grid.style.width = '600px'
       welcomeScreen.classList.add('hide')
       pageWrapper.classList.remove('hide')
-      finalScore = Math.ceil(timer.innerText / 2)
+      mineDensity = 2
+      // finalScore = Math.ceil(timer.innerText / 2)
       generateGame()
     } 
   }
@@ -145,7 +155,7 @@ function init() {
         this.innerText = ''
         this.flag = 'on'
         this.gridPosition.classList.contains('flag') ? flagsPlaced -= 1 : flagsPlaced += 1
-        scoreBoard.innerText = flagsPlaced
+        mineDisplay.innerText = flagsPlaced
       }
       // methods for checking for mines in each direction of surrounding field, field is 8 squares around
       // allows for bespoke checking depending on position of the cell (corner, top row, side column etc.)
