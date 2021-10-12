@@ -11,10 +11,10 @@ body {
 
 .welcome-screen {
   display: flex;
-  margin: 0;
+  margin-top: -100px;
   padding: 0;
   flex-direction: column;
-  height: 75vh;
+  height: 90vh;
   justify-content: center;
   align-items: center;
   color: white;
@@ -22,45 +22,84 @@ body {
 }
 
 .welcome-screen h1 {
-  font-size: clamp(32px, 64px, 72px);
-  animation: fadeIn 3s ease-in;
+  font-size: clamp(24px, 4vw, 72px);
 }
-.welcome-screen p {
-  font-size: 32px;
-  animation: fadeIn 4s ease-in;
+.welcome-screen h2 {
+  font-size: clamp(18px, 2vw, 46px);
+  
 }
 
-.button-container {
+.mode {
   display: flex;
-  flex-direction: row;
-  justify-content: space-between;
-  width: 35vw;
+  flex-wrap: wrap;
+  align-items: center;
+  flex-direction: column;
+  justify-content: center;
+  width: 100vw;
+  height: 20vh;
   min-width: 350px;
   margin: 32px;
+  animation: fadeIn2 5s ease-in;
 }
-
-.button-container button {
+.music {
   display: flex;
+  flex-wrap: wrap;
   align-items: center;
+  flex-direction: column;
   justify-content: center;
-  border-radius: 10px;
-  width: 25%;
-  height: 5vh;
-  color: white;
-  font-size: clamp(14px, 1.4vw, 24px);
-  background: transparent;
-  border: solid 2px white;
-  font-family: 'Montserrat', sans-serif;
-  padding: 10px;
-  box-shadow: 1px 1px 1px 1px rgba(255,255,255,0.2);
-  animation: fadeIn 5s ease-in;
+  width: 100vw;
+  height: 20vh;
+  min-width: 350px;
+  margin: 32px;
+  animation: fadeIn 3s ease-in;
+  
 }
 
-.button-container button:hover {
+.mode button {
+  font-family: 'Montserrat', sans-serif; 
+  font-size: clamp(12px, 1.2vw, 24px);
+  border: solid 2px white;
+  color: white; 
+  min-width: 100px;
+  width: 12vw;
+  margin: 0 30px;
+  background: transparent;
+  padding: 10px;
+  border-radius: 5px;
+  box-shadow: 1px 1px 1px 1px rgba(255,255,255,0.2);
+}
+.music button {
+  font-family: 'Montserrat', sans-serif; 
+  font-size: clamp(12px, 1.2vw, 24px);
+  border: solid 2px white;
+  color: white; 
+  min-width: 100px;
+  width: 12vw;
+  margin: 0 30px;
+  background: transparent;
+  padding: 10px;
+  border-radius: 5px;
+  box-shadow: 1px 1px 1px 1px rgba(255,255,255,0.2);
+}
+
+.mode button:hover {
   box-shadow: 1px 1px 1px 1px rgba(255,255,255,0.7);
   font-weight: bold;
   font-style: italic
 } 
+.music button:hover {
+  box-shadow: 1px 1px 1px 1px rgba(255,255,255,0.7);
+  font-weight: bold;
+  font-style: italic
+} 
+
+.music-info {
+  display: none;
+  font-size: 10px;
+  opacity: 0.7;
+  margin-top: 50px;
+  align-self:center;
+}
 
 /* Main game styling */
 
@@ -135,6 +174,7 @@ body {
   color: white;
   font-family: 'Montserrat', sans-serif;
   border-radius: 5px;
+  min-width: 50px;
   width: 50px;
   order: 1;
   display: flex;
@@ -227,7 +267,7 @@ body {
     justify-content: center;
     align-items: center;
     flex-direction: column;
-    margin-right: 200px;
+    margin-right: 100px;
     width: 25vw;
     height: 45vh;
     flex-direction: column;
@@ -248,5 +288,11 @@ body {
 
 @keyframes fadeIn {
   0% {opacity: 0;}
-  100% {opacity: 1}
+  100% {opacity: 1;}
+}
+@keyframes fadeIn2 {
+  0% {opacity: 0;}
+  50% {opacity: 0.1;}
+  75% {opacity: 0.3;}
+  100% {opacity: 1;}
 }

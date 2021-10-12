@@ -1,20 +1,26 @@
 function init() {
+
   
   //variables
   const grid = document.querySelector('.grid-container')
-  let timer = document.querySelector('.timer')
+  const timer = document.querySelector('.timer')
   const mineDisplay = document.querySelector('.mine-display')
   const welcomeScreen = document.querySelector('.welcome-screen')
   const pageWrapper = document.querySelector('.page-wrapper')
   const beginnerButton = document.querySelector('.beginner-button')
   const advancedButton = document.querySelector('.advanced-button')
   const expertButton = document.querySelector('.expert-button')
+  const electronicButton = document.querySelector('.electronic')
+  const lofiButton = document.querySelector('.lofi')
+  const jazzButton = document.querySelector('.jazz')
   const endGameMessage = document.querySelector('.end-game')
   const finalMessage = document.createElement('h1')
   const playAgain = document.querySelector('.play-again')
   const winner = document.querySelector('.winner')
+  const audio = document.querySelector('audio')
+  const musicInfo = document.querySelector('.music-info')
   let mineDensity = 0
-  let counter = 0
+  // let counter = 0
 
   let width = 0
   let gridSize = 0
@@ -25,10 +31,9 @@ function init() {
   let mineCount = 0
   let flagsPlaced = 0
   timer.innerText = 0
-  let clickCount = 0
-  let finalScore = 0
+  const clickCount = 0
 
-  // functions that define different states of the game
+  // functions that define different states of the game --> win, lose, reset
   
   function gameReset() {
     welcomeScreen.classList.remove('hide')
@@ -39,7 +44,9 @@ function init() {
   function endGameLoss() {
     objectArray.forEach(item => {
       item.clicked()
-      if (item.gridPosition.classList.contains('flag')) {item.gridPosition.classList.remove('flag')}
+      if (item.gridPosition.classList.contains('flag')) {
+        item.gridPosition.classList.remove('flag')
+      }
     })
     clearInterval(1)
     finalMessage.innerText = 'Game Over'
@@ -53,7 +60,12 @@ function init() {
   }
 
   function endGameWin() {
-    objectArray.forEach(item => item.clicked())
+    objectArray.forEach(item => {
+      if (item.mine === 'on') {
+        item.gridPosition.classList.remove('flag')
+        item.gridPosition.classList.add('mine')
+      }
+    })
     finalMessage.innerText = 'Victory!'
     finalMessage.style.animation = 'fadeIn 3s'
     endGameMessage.appendChild(finalMessage)
@@ -70,11 +82,11 @@ function init() {
   gameReset()
   
 
-  //function to define the grid size & number of mines according to diffiuclty level
+  //define a funcction that sets the grid size & number of mines according to difficulty level chosen 
 
   function gameState(event) {
     if (event.target.classList.contains('beginner-button')){ 
-      mineCount = 5
+      mineCount = 3
       mineDisplay.innerText = mineCount
       width = 9
       gridSize = 81
@@ -116,12 +128,51 @@ function init() {
       generateGame()
     } 
   }
+
+  // attach functions to respective buttons via eventListeners
   
   beginnerButton.addEventListener('click', gameState)
   advancedButton.addEventListener('click', gameState)
   expertButton.addEventListener('click', gameState)
   playAgain.addEventListener('click', () => location.reload(true))
   
+  
+  // define functions for music choice & add event listeners to respective buttons
+  
+  function electronic() {
+    audio.src = './assets/Metre - Portamento.mp3.mp3'
+    audio.play()
+    audio.loop = true
+    musicInfo.innerText = 'Metre by Portamento, nultiel records'
+    musicInfo.style.display = 'inline'
+  }
+  function lofi() {
+    audio.src = './assets/Chill_David_Fesliyan.mp3'
+    audio.play()
+    audio.loop = true
+    musicInfo.innerText = 'Chill Gaming by David Fesliyan'
+    musicInfo.style.display = 'inline'
+  }
+  function jazz() {
+    audio.src = './assets/Smoky_Lounge.mp3'
+    audio.play()
+    audio.loop = true
+    musicInfo.innerText = 'Smoky Lounge by David Renda'
+    musicInfo.style.display = 'inline'
+  }
+  
+  electronicButton.addEventListener('click', electronic)
+  lofiButton.addEventListener('click', lofi)
+  jazzButton.addEventListener('click', jazz)
+  // audio.addEventListener('ended', () => {
+  //   this.currentTime = 0
+  //   this.play()
+  // }, false)
+  
+  
+  
+  //define a function which handles the main conent of the game including 
+  // --> generating a grid, a Cell Class constructor (methods of which will control the flow of the gameplay) and each cell object
   
   function generateGame() {
 
@@ -212,7 +263,6 @@ function init() {
         this.gridPosition.style.backgroundColor = 'rgba(93, 65, 87, 1)'
       } 
       clicked() {
-        console.log(this.gridPosition)
         if (this.mine === 'on'){
           this.state = 'clicked'
           this.gridPosition.style.backgroundColor = 'rgba(168, 202, 186, 0.8)'
@@ -224,14 +274,11 @@ function init() {
           this.state = 'clicked'
           this.gridPosition.innerText  = this.number
           this.gridPosition.style.backgroundColor = 'rgba(168, 202, 186, 0.5)'
-          console.log('stopped due to a number')
-          console.log(this.number)
           return
         }
-        // this 'else if' is where the functionality will live for auto opening surrounding cells by making .clicked()
-        // a recursive function/method
+        // this 'else if' is where the functionality will live for auto opening surrounding cells 
         // route => for any clicked cell, check its surrounding cells (this means a cell won't check undefined cells given how
-        // 'surroundingCells' was constructed relative to each cell') then IF any of those cells are 'unclicked' pass them back to the
+        // 'surroundingCells' was constructed relative to each cell) then IF any of those cells are 'unclicked' pass them back to the
         // the clicked method for checking. 
 
         else if (this.number === 0) {
@@ -248,9 +295,9 @@ function init() {
       }
     }
       
-      // instantiate objects to fill the grid (one for each cell). Also pushing objects to an array to open 
-      // up more methods for manipulating the data later 
-      // add the correct class for the mode 
+    // instantiate objects to fill the grid (one for each cell). Also pushing objects to an array to open 
+    // up more methods for manipulating the data later 
+    // add the correct class for the mode 
 
   for (let i = 0; i < gridSize; i++){
     const cellObject = new Cell(document.getElementById(`${i}`),'unclicked', 'off', i, 'none', 'none', [])
@@ -282,8 +329,8 @@ function init() {
   
     placeMines()
 
-  // create arrays corresponding to cell structures that have different restrictions e.g., corner cells, column cells
-  // to make it easier to call different methods on each for the checkField method.
+    // create arrays corresponding to cell structures that have different restrictions e.g., corner cells, column cells
+    // these will be used to 
     
     const corners = [objectArray[0], objectArray[width-1], objectArray[gridSize-width], objectArray[gridSize-1]]
     
@@ -299,14 +346,14 @@ function init() {
     
     // populate an array with the correct identifiers and then map those array items to indexes of the objectArray
     // this will provide an array of a numbers that can be mapped to give both left and right columns
-  const leftColumnNumbers = []
+    const leftColumnNumbers = []
     for (let i = 1; i < width-1; i++){
       leftColumnNumbers.push(i * width)
     }
     const leftColumn = leftColumnNumbers.map(item => objectArray[item]) 
     const rightColumn = leftColumnNumbers.map(item => objectArray[item + (width-1)])
 
-    //nested forloop to push the rest of the numbers into an array, should be scalable, using a map as a above to get indexes
+    //nested forloop to push the rest of the numbers into an array, should be scalable, using map() as a above to get indexes
     let remainingCells = []
     let startingId = width+1
     for (let i=0; i < width-2; i++) {
@@ -317,9 +364,9 @@ function init() {
     }
     const mainGrid = remainingCells.map(item => objectArray[item])
 
-    // use each array to call the checkField method on its elements, passing the appriopriate parameters 
-    // given the position of the elements on the grid. In the checkField() method, these will be used to check 
-    // for mines and for blank squares in the surrounding field of a cell. 
+    // use each array to call the checkField method on its elements(cell objects), passing the appriopriate parameters 
+    // given the position of the elements on the grid.
+
     mainGrid.forEach(item => {
       item.checkField(item.up(), item.down(), item.left(), item.right(), item.dur(), item.dul(), item.ddl(), item.ddr())
     })
@@ -345,47 +392,43 @@ function init() {
       if (item === corners[3]){item.checkField(item.up(), item.left(), item.dur())}
     }) 
 
- 
-   
-
-    //event listeners
+    //event listeners & their functions to handle gameplay clicks (clicking on cells)
 
     // this is the way the game will start
     objectArray.forEach(item => item.unclicked())
 
     function handleLeftClick (event){
+      console.log(clickCount)
       objectArray[event.target.id].clicked()
+      if (objectArray[event.target.id].number === 0){
+        objectArray[event.target.id].clicked() 
+      }
       if (objectArray[event.target.id].mine === 'on') {
         endGameLoss()
       } 
-      if (objectArray[event.target.id].number === 0){
-        // objectArray[event.target.id].surroundingCells.forEach(item => item.clicked())
-        // objectArray[event.target.id].surroundingCells.forEach(item => autoFlood(item))
-        objectArray[event.target.id].clicked()
-        
-      }
       objectArray.forEach(item => {
-        if (item.state === 'clicked') {clickedArray.push(item)} 
+        if (item.state === 'clicked'){
+          clickedArray.push(item)
+          console.log(clickedArray.length)
+        } 
       })
-      clickedArray.length === (gridSize - mineCount) ? endGameWin() : clickedArray = []
+      clickedArray.length === (gridSize) ? endGameWin() : clickedArray = [] 
     }
-
-
-
-    objectArray.forEach(item => {
-      item.gridPosition.addEventListener('click', handleLeftClick)
-    })
-
+    
+    
     function handleRightClick(event) {
       event.preventDefault()
       objectArray[event.target.id].placeFlag()
-      clickCount += 1
     }
     objectArray.forEach(item => {
       item.gridPosition.addEventListener('contextmenu', handleRightClick)
     })
     
-      // build a second count timer & attach it to an eventlistener, make sure it triggers only once
+    objectArray.forEach(item => {
+      item.gridPosition.addEventListener('click', handleLeftClick)
+    })
+    
+    // build a second count timer & attach it to an eventlistener, make sure it triggers only once
     function startTimer () {
       let timerInterval = setInterval(() => timer.innerText ++, 1000)
     } 

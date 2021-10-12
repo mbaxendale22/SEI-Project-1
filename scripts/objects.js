@@ -13,7 +13,8 @@ function init() {
   const finalMessage = document.createElement('h1')
   const playAgain = document.querySelector('.play-again')
   const winner = document.querySelector('.winner')
-  let mineDensity = 0
+  
+ 
   let counter = 0
 
   let width = 0
@@ -33,7 +34,8 @@ function init() {
   function gameReset() {
     welcomeScreen.classList.remove('hide')
     pageWrapper.classList.add('hide')
-    playAgain.style.display = 'none'
+    playAgain.style.display = 'none' 
+    let mineDensity = 0
   }
   
   function endGameLoss() {
