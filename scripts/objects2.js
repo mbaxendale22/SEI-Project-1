@@ -28,10 +28,11 @@ function init() {
   let minesArray = []
   const objectArray = []
   let clickedArray = []
+  let correctFlagPlaced = []
   let mineCount = 0
   let flagsPlaced = 0
   timer.innerText = 0
-  const clickCount = 0
+
 
   // functions that define different states of the game --> win, lose, reset
   
@@ -201,14 +202,23 @@ function init() {
         this.gridPosition.innerText = ''
         this.mine = 'on' 
       }
-
+      // win condition based on flags placed, insert conditional to prevent overflagging!
       placeFlag(){
-        this.gridPosition.classList.toggle('flag')
-        this.innerText = ''
-        this.flag = 'on'
-        this.gridPosition.classList.contains('flag') ? flagsPlaced -= 1 : flagsPlaced += 1
-        this.gridPosition.classList.contains('flag') ? this.state = 'clicked' : this.state = 'unclicked'
-        mineDisplay.innerText = flagsPlaced
+        if (flagsPlaced === 0) {
+          const autoRemoveFlag = objectArray.filter(item => item.flag === 'on')
+          autoRemoveFlag[0].gridPosition.classList.remove('flag')
+          autoRemoveFlag[0].flag = 'off'
+          flagsPlaced += 1
+          mineDisplay.innerText = flagsPlaced
+        }
+        else {
+          this.gridPosition.classList.toggle('flag')
+          this.innerText = ''
+          this.flag = 'on'
+          this.gridPosition.classList.contains('flag') ? flagsPlaced -= 1 : flagsPlaced += 1
+          this.gridPosition.classList.contains('flag') ? this.state = 'clicked' : this.state = 'unclicked'
+          mineDisplay.innerText = flagsPlaced
+        }
       }
       // methods for checking for mines in each direction of surrounding field, field is 8 squares around
       // allows for bespoke checking depending on position of the cell (corner, top row, side column etc.)
@@ -398,28 +408,23 @@ function init() {
     objectArray.forEach(item => item.unclicked())
 
     function handleLeftClick (event){
-      console.log(clickCount)
       objectArray[event.target.id].clicked()
+      if (objectArray[event.target.id].mine === 'on') {
+        endGameLoss()
       if (objectArray[event.target.id].number === 0){
         objectArray[event.target.id].clicked() 
       }
-      if (objectArray[event.target.id].mine === 'on') {
-        endGameLoss()
       } 
-      objectArray.forEach(item => {
-        if (item.state === 'clicked'){
-          clickedArray.push(item)
-          console.log(clickedArray.length)
-        } 
-      })
-      clickedArray.length === (gridSize) ? endGameWin() : clickedArray = [] 
-    }
-    
+    } 
     
     function handleRightClick(event) {
       event.preventDefault()
       objectArray[event.target.id].placeFlag()
+      correctFlagPlaced = objectArray.filter(item => item.mine === 'on' && item.flag === 'on')
+      console.log(correctFlagPlaced)
+      correctFlagPlaced.length === mineCount ? endGameWin() : correctFlagPlaced = []
     }
+
     objectArray.forEach(item => {
       item.gridPosition.addEventListener('contextmenu', handleRightClick)
     })
