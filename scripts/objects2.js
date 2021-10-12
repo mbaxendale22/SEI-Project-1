@@ -211,7 +211,7 @@ function init() {
         this.gridPosition.innerText = ''
         this.gridPosition.style.backgroundColor = 'rgba(93, 65, 87, 1)'
       } 
-      clicked(nextCell) {
+      clicked() {
         console.log(this.gridPosition)
         if (this.mine === 'on'){
           this.state = 'clicked'
@@ -224,50 +224,22 @@ function init() {
           this.state = 'clicked'
           this.gridPosition.innerText  = this.number
           this.gridPosition.style.backgroundColor = 'rgba(168, 202, 186, 0.5)'
+          console.log('stopped due to a number')
+          console.log(this.number)
           return
         }
         // this 'else if' is where the functionality will live for auto opening surrounding cells by making .clicked()
         // a recursive function/method
         else if (this.number === 0) {
-          this.state = 'clicked'
           this.gridPosition.innerText = ''
           this.gridPosition.style.backgroundColor = 'rgba(168, 202, 186, 0.5)'
-          if (mainGrid.includes(objectArray[this.identifier])) {
-            console.log('This is the current cell ==>', this.gridPosition)
-            console.log('this is the next cell ==>', this.left())
-            nextCell = this.left()
-            nextCell.clicked()
-          }
-          if (leftColumn.includes(objectArray[this.identifier])) {
-            console.log('This is the current cell ==>', this.gridPosition)
-            console.log('this is the next cell ==>', this.up())
-            nextCell = this.up()
-            nextCell.clicked()
-          }
-          if (rightColumn.includes(objectArray[this.identifier])) {
-            console.log('This is the current cell ==>', this.gridPosition)
-            console.log('this is the next cell ==>', this.up())
-            nextCell = this.down()
-            nextCell.clicked()
-          }
-          if (topRow.includes(objectArray[this.identifier])) {
-            console.log('This is the current cell ==>', this.gridPosition)
-            console.log('this is the next cell ==>', this.up())
-            nextCell = this.right()
-            nextCell.clicked() 
-          }
-          if (objectArray[this.identifier] === corners[0]) {
-            console.log('This is the current cell ==>', this.gridPosition)
-            console.log('this is the next cell ==>', this.right())
-            nextCell = this.right()
-            nextCell.clicked()
-          }
-          if (objectArray[this.identifier] === corners[1]) {
-            console.log('This is the current cell ==>', this.gridPosition)
-            console.log('this is the next cell ==>', this.right())
-            nextCell = this.down()
-            nextCell.clicked()
-          }
+          this.surroundingCells.forEach(item => {
+            if (item.state === 'unclicked') {
+              item.state = 'clicked'
+              item.clicked()
+            }
+            else {return}
+          })
         } 
       }
     }
