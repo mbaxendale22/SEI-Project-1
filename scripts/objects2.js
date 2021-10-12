@@ -147,7 +147,6 @@ function init() {
         this.surroundingCells = surroundingCells
       }
       placeMine() {
-        // this.gridPosition.classList.add('mine');
         this.gridPosition.innerText = ''
         this.mine = 'on' 
       }
@@ -157,6 +156,7 @@ function init() {
         this.innerText = ''
         this.flag = 'on'
         this.gridPosition.classList.contains('flag') ? flagsPlaced -= 1 : flagsPlaced += 1
+        this.gridPosition.classList.contains('flag') ? this.state = 'clicked' : this.state = 'unclicked'
         mineDisplay.innerText = flagsPlaced
       }
       // methods for checking for mines in each direction of surrounding field, field is 8 squares around
@@ -230,6 +230,10 @@ function init() {
         }
         // this 'else if' is where the functionality will live for auto opening surrounding cells by making .clicked()
         // a recursive function/method
+        // route => for any clicked cell, check its surrounding cells (this means a cell won't check undefined cells given how
+        // 'surroundingCells' was constructed relative to each cell') then IF any of those cells are 'unclicked' pass them back to the
+        // the clicked method for checking. 
+
         else if (this.number === 0) {
           this.gridPosition.innerText = ''
           this.gridPosition.style.backgroundColor = 'rgba(168, 202, 186, 0.5)'
