@@ -90,7 +90,7 @@ body {
 .music button:hover {
   box-shadow: 1px 1px 1px 1px rgba(255,255,255,0.7);
   font-weight: bold;
-  font-style: italic
+  font-style: italic;
 } 
 
 .music-info {
@@ -390,7 +390,11 @@ body {
     
       .winner p{
         font-size: 14px;
-      } 
+      }
+      
+      .revealed {
+        animation: test 1s linear both;
+      }
     
   }
 
@@ -412,4 +416,10 @@ Animation */
   50% {opacity: 0.1;}
   75% {opacity: 0.3;}
   100% {opacity: 1;}
+}
+
+@keyframes test {
+0%{-webkit-transform:scale(1) rotate3d(1,1,0,0deg);transform:scale(1) rotate3d(1,1,0,0deg)}
+50%{-webkit-transform:scale(2.5) rotate3d(1,1,0,90deg);transform:scale(2.5) rotate3d(1,1,0,90deg)}
+100%{-webkit-transform:scale(1) rotate3d(1,1,0,180deg);transform:scale(1) rotate3d(1,1,0,180deg)}
 }
