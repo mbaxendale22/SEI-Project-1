@@ -61,10 +61,7 @@ function init() {
 
   function endGameWin() {
     objectArray.forEach(item => {
-      if (item.mine === 'on') {
-        item.gridPosition.classList.remove('flag')
-        item.gridPosition.classList.add('mine')
-      }
+      item.clicked() 
     })
     finalMessage.innerText = 'Victory!'
     finalMessage.style.animation = 'fadeIn 3s'
@@ -123,7 +120,6 @@ function init() {
       welcomeScreen.classList.add('hide')
       pageWrapper.classList.remove('hide')
       mineDensity = 2
-      // finalScore = Math.ceil(timer.innerText / 2)
       generateGame()
     } 
   }
@@ -268,7 +264,9 @@ function init() {
         this.gridPosition.style.backgroundColor = 'rgba(93, 65, 87, 1)'
       } 
       clicked() {
+        this.gridPosition.style.animation = 'jello-horizontal .9s both'
         if (this.mine === 'on'){
+          this.gridPosition.style.animation = 'shake-horizontal .8s cubic-bezier(.455,.03,.515,.955) both'
           this.state = 'clicked'
           this.gridPosition.style.backgroundColor = 'rgba(168, 202, 186, 0.8)'
           this.gridPosition.innerText = ''
@@ -285,7 +283,7 @@ function init() {
         // route => for any clicked cell, check its surrounding cells (this means a cell won't check undefined cells given how
         // 'surroundingCells' was constructed relative to each cell) then IF any of those cells are 'unclicked' pass them back to the
         // the clicked method for checking. 
-
+        
         else if (this.number === 0) {
           this.gridPosition.innerText = ''
           this.gridPosition.style.backgroundColor = 'rgba(168, 202, 186, 0.5)'
@@ -309,13 +307,16 @@ function init() {
     const cellObject = new Cell(document.getElementById(`${i}`),'unclicked', 'off', i, 'none', 'none', [])
       switch (gridSize) {
         case 81:
-          cellObject.gridPosition.classList.add('beginner-cells');
+          cellObject.gridPosition.classList.add('beginner-cells')
+          cellObject.gridPosition.style.animation = 'bounce-top .9s both';
           break;
-        case 256: 
+          case 256: 
           cellObject.gridPosition.classList.add('advanced-cells');
+          cellObject.gridPosition.style.animation = 'bounce-top .9s both';
           break;
-        case 576:
-          cellObject.gridPosition.classList.add('expert-cells');
+          case 576:
+            cellObject.gridPosition.classList.add('expert-cells');
+            cellObject.gridPosition.style.animation = 'bounce-top .9s both';
           break;
       }
     objectArray.push(cellObject)
