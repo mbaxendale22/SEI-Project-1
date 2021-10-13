@@ -96,7 +96,6 @@ function init() {
       welcomeScreen.classList.add('hide')
       pageWrapper.classList.remove('hide')
       mineDensity = 1.2
-      // finalScore = Math.ceil(timer.innerText / 1.2)
       generateGame()
     }   
     else if (event.target.classList.contains('advanced-button')){
@@ -169,9 +168,7 @@ function init() {
   //define a function which handles the main conent of the game including 
   // --> generating a grid, a Cell Class constructor (methods of which will control the flow of the gameplay) and each cell object
   
-  function generateGame() {
-
-   
+  function generateGame() {   
     // create a grid
     for (let i = 0; i < gridSize; i++){
       const cell = document.createElement('div')
@@ -181,7 +178,6 @@ function init() {
       cellsArray.push(cell)
     }
     // class for constructing cell objects, calling methods on which will define the behaviour of each cell
-    // and ultimately the game.
     class Cell {
       constructor (gridPosition,state, mine, identifier, number, flag, surroundingCells) {
         this.gridPosition = gridPosition 
@@ -215,7 +211,7 @@ function init() {
         }
       }
       // methods for checking for mines in each direction of surrounding field, field is 8 squares around
-      // allows for bespoke checking depending on position of the cell (corner, top row, side column etc.)
+      // gives access to any of a cell's surrounding field irrespective of grid size 
       up(){
         return objectArray[this.identifier - width]
       }
@@ -242,8 +238,7 @@ function init() {
         return (objectArray[(this.identifier + width) + 1])
       }
       // each method passed as parameter to the main checkField methods with control flow
-      // to prevent 'undefined' returning from unpassed parameters
-      // ? would like to refactor this to condense it
+      // to prevent 'undefined' returning from unpassed parameters. 
       checkField(a, b, c, d, e, f, g, h){
         if (a !== undefined){this.surroundingCells.push(a)}
         if (b !== undefined){this.surroundingCells.push(b)}
@@ -253,19 +248,23 @@ function init() {
         if (f !== undefined){this.surroundingCells.push(f)}
         if (g !== undefined){this.surroundingCells.push(g)}
         if (h !== undefined){this.surroundingCells.push(h)}
+
         const howManyMines = this.surroundingCells.filter(item => item.mine === 'on')
         this.number = howManyMines.length
+        
         if (howManyMines.length === 0 ) {
           this.gridPosition.innerText = ''
         }
         else {this.gridPosition.innerText = howManyMines.length
         }
       }
+      //default state of cells 
       unclicked() {
         this.state = 'unclicked'
         this.gridPosition.innerText = ''
         this.gridPosition.style.backgroundColor = 'rgba(93, 65, 87, 1)'
       } 
+      // main recursive function which handles showing correct numbers on mine-adjacent squares & auto-opening blank squares
       clicked() {
         this.gridPosition.style.animation = 'jello-horizontal .9s both'
         if (this.mine === 'on'){
@@ -282,11 +281,8 @@ function init() {
           this.gridPosition.style.backgroundColor = 'rgba(168, 202, 186, 0.5)'
           return
         }
-        // this 'else if' is where the functionality will live for auto opening surrounding cells 
-        // route => for any clicked cell, check its surrounding cells (this means a cell won't check undefined cells given how
-        // 'surroundingCells' was constructed relative to each cell) then IF any of those cells are 'unclicked' pass them back to the
+        // for any clicked cell, check only its surrounding cells then if any of those cells are 'unclicked' pass them back to the
         // the clicked method for checking. 
-        
         else if (this.number === 0) {
           this.gridPosition.innerText = ''
           this.gridPosition.style.backgroundColor = 'rgba(168, 202, 186, 0.5)'
@@ -302,32 +298,30 @@ function init() {
       }
     }
       
-    // instantiate objects to fill the grid (one for each cell). Also pushing objects to an array to open 
-    // up more methods for manipulating the data later 
+    // instantiate objects to fill the grid (one for each cell).
     // add the correct class for the mode 
 
-  for (let i = 0; i < gridSize; i++){
-    const cellObject = new Cell(document.getElementById(`${i}`),'unclicked', 'off', i, 'none', 'none', [])
+    for (let i = 0; i < gridSize; i++){
+      const cellObject = new Cell(document.getElementById(`${i}`),'unclicked', 'off', i, 'none', 'none', [])
       switch (gridSize) {
         case 81:
           cellObject.gridPosition.classList.add('beginner-cells')
           cellObject.gridPosition.style.animation = 'bounce-top .9s both';
           break;
-          case 256: 
+        case 256: 
           cellObject.gridPosition.classList.add('advanced-cells');
           cellObject.gridPosition.style.animation = 'bounce-top .9s both';
           break;
-          case 576:
-            cellObject.gridPosition.classList.add('expert-cells');
-            cellObject.gridPosition.style.animation = 'bounce-top .9s both';
+        case 576:
+          cellObject.gridPosition.classList.add('expert-cells');
+          cellObject.gridPosition.style.animation = 'bounce-top .9s both';
           break;
       }
-    objectArray.push(cellObject)
+      objectArray.push(cellObject)
     }
 
     objectArray.forEach(item => item.unclicked())
-    //randomly generate a number call the placeMine method in corresponding objects
-    // in the objectsArray, and avoid duplicates using set()
+    //randomly generate a number & call the placeMine method in corresponding objects, avoid duplicates using set()
     function placeMines (){
       const randomNumbers = new Set()
       while (randomNumbers.size < mineCount) {
@@ -339,8 +333,7 @@ function init() {
   
     placeMines()
 
-    // create arrays corresponding to cell structures that have different restrictions e.g., corner cells, column cells
-    // these will be used to 
+    // create arrays corresponding to groups of cells that have the same restrictions e.g., corner cells, column cells, top row
     
     const corners = [objectArray[0], objectArray[width-1], objectArray[gridSize-width], objectArray[gridSize-1]]
     
@@ -363,8 +356,8 @@ function init() {
     const leftColumn = leftColumnNumbers.map(item => objectArray[item]) 
     const rightColumn = leftColumnNumbers.map(item => objectArray[item + (width-1)])
 
-    //nested forloop to push the rest of the numbers into an array, should be scalable, using map() as a above to get indexes
-    let remainingCells = []
+    //nested forloop to push the remaining grid positions into an array
+    const remainingCells = []
     let startingId = width+1
     for (let i=0; i < width-2; i++) {
       for (let j = startingId; j < startingId + width-2; j++){
@@ -416,7 +409,6 @@ function init() {
         objectArray[event.target.id].clicked() 
       }
     } 
-     
     
     function handleRightClick(event) {
       event.preventDefault()
@@ -440,7 +432,6 @@ function init() {
     } 
     
     grid.addEventListener('click', startTimer, { once: true })
-
   }
 
 }
