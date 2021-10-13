@@ -71,9 +71,14 @@ function init() {
     timer.style.display = 'none'
     mineDisplay.style.display = 'none'
     grid.style.height = '400px'
-    winner.lastElementChild.innerText = `You found the mines in ${timer.innerText} seconds
+    const mineTime = document.createElement('p')
+    mineTime.innerText = `You found the mines in ${timer.innerText} seconds`
+    winner.appendChild(mineTime)
+    const scoreTime = document.createElement('p')
+    scoreTime.innerText = `Your final score is ${Math.round(timer.innerText / mineDensity)}`
+    winner.appendChild(scoreTime)
 
-    Your final score is ${Math.round(timer.innerText / mineDensity)}`
+    
   }
 
   

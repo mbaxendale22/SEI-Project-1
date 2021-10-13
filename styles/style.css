@@ -3,11 +3,10 @@
 }
 
 body {
-  /* background: linear-gradient(to right, #355c7d, #6c5b7b, #c06c84); */
   background: linear-gradient(to right, #5d4157, #a8caba);
 }
 
-/* Landing, choice of difficulties */
+/* Landing screen, choice of difficulties */
 
 .welcome-screen {
   display: flex;
@@ -54,6 +53,8 @@ body {
   animation: fadeIn 3s ease-in;
   
 }
+
+/* buttons */
 
 .mode button {
   font-family: 'Montserrat', sans-serif; 
@@ -118,10 +119,10 @@ body {
   display: flex;
   flex-wrap: wrap;
   justify-content: center;
-  min-width: 300px;
-  min-width: 300px;
-  height: 600px;
-  width: 600px;
+  min-width: 350px;
+  min-width: 350px;
+  height: 80vh;
+  width: 80vw;
   align-items: center;
   box-shadow: 0 0 20px 0 rgba(0, 0, 0, 0.2);
   order: 2
@@ -168,6 +169,7 @@ body {
   font-weight: bold;
 }
 
+/* in game info  */
 
 .mine-display{
   border: 6px outset white;
@@ -175,21 +177,21 @@ body {
   color: white;
   font-family: 'Montserrat', sans-serif;
   border-radius: 5px;
-  min-width: 100px;
+  min-width: 75px;
   order: 1;
   display: flex;
   justify-content: center;
   align-items: center;
   font-size: 24px;
-  width: 10vw;
-  height: 15vh;
-  margin-right: 150px;
+  width: 125px;
+  height: 100px;
+  margin-right: 6vw;
 }
 
 .timer{
   border: 6px outset;
   box-shadow: 5px 5px 15px rgba(0, 0, 0, 0.4);
-  margin-left: 150px;
+  margin-left: 6vw;
   color: white;
   font-family: 'Montserrat', sans-serif;
   border-radius: 5px;
@@ -198,13 +200,10 @@ body {
   justify-content: center;
   align-items: center;
   font-size: 24px;
-  min-width: 100px;
-  width: 10vw;
-  height: 15vh;
+  min-width: 75px;
+  width: 125px;
+  height: 100px;
 }
-
-
-
 
 
 /* In game classes to toggle  */
@@ -235,9 +234,6 @@ body {
   color: white;
 }
 
-.play-again {
-  display: flex;
-}
 
 .play-again {
     display: flex;
@@ -285,11 +281,22 @@ body {
     font-size: 16px;
   }
 
-
-
-
-  @media (max-width: 600px) {
+/* media query for smaller screen sizes & desktop half-size display */
   
+  
+  @media (max-width: 700px) {
+    .welcome-screen {
+      display: flex;
+      margin-top: -100px;
+      padding: 0;
+      flex-direction: column;
+      height: 90vh;
+      justify-content: center;
+      align-items: center;
+      color: white;
+      font-family: 'Montserrat', sans-serif;
+    }
+    
     .page-wrapper {
       display: flex;
       flex-wrap: wrap;
@@ -298,6 +305,8 @@ body {
       height: 85vh;
       max-width: 85vw;
       border: solid white;
+      margin-top: -50px;
+      margin-left: 40px;
     }
     
     
@@ -305,8 +314,8 @@ body {
       display: flex;
       flex-wrap: wrap;
       justify-content: center;
-      max-width: 300px;
-      max-height: 300px;
+      max-width: 400px;
+      max-height: 400px;
       align-items: center;
       box-shadow: 0 0 20px 0 rgba(0, 0, 0, 0.2);
     }
@@ -361,7 +370,7 @@ body {
         font-family: 'Montserrat', sans-serif;
         padding: 10px;
         box-shadow: 1px 1px 1px 1px rgba(255,255,255,0.2);
-        margin: 50px auto;
+        margin: 0px auto;
         animation: fadeIn 5s;
       }
       
@@ -376,12 +385,13 @@ body {
         justify-content: center;
         align-items: center;
         flex-direction: column;
-        width: 100px;
-        height: 100px;
+        width: 300px;
+        height: 200px;
         flex-direction: column;
         color: white;
         animation: fadeIn 3s ease-in;
         font-family: 'Montserrat', sans-serif;
+        border: solid black;
       }
     
       .winner h1 {
@@ -391,12 +401,14 @@ body {
       .winner p{
         font-size: 14px;
       }
-      
-    
+      .hide {
+        display: none;
+      }
   }
 
-/* 
-Animation */
+ /* Animation */ 
+
+      /* in house */
 
 @keyframes fadeIn {
   0% {opacity: 0;}
@@ -408,6 +420,10 @@ Animation */
   75% {opacity: 0.3;}
   100% {opacity: 1;}
 }
+
+/* external  */ 
+
+/* Generated with Animista  */
 
 
 @keyframes shake-horizontal{
