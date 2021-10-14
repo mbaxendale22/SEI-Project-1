@@ -304,7 +304,6 @@ body {
       flex-direction: row;
       height: 85vh;
       max-width: 85vw;
-      border: solid white;
       margin-top: -50px;
       margin-left: 40px;
     }
@@ -391,7 +390,6 @@ body {
         color: white;
         animation: fadeIn 3s ease-in;
         font-family: 'Montserrat', sans-serif;
-        border: solid black;
       }
     
       .winner h1 {

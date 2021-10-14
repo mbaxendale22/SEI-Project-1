@@ -82,11 +82,11 @@ function init() {
   gameReset()
   
 
-  //define a funcction that sets the grid size & number of mines according to difficulty level chosen 
+  //define a function that sets the grid size & number of mines according to difficulty level chosen 
 
   function gameState(event) {
     if (event.target.classList.contains('beginner-button')){ 
-      mineCount = 1
+      mineCount = 10
       mineDisplay.innerText = mineCount
       width = 9
       gridSize = 81
@@ -131,7 +131,7 @@ function init() {
   beginnerButton.addEventListener('click', gameState)
   advancedButton.addEventListener('click', gameState)
   expertButton.addEventListener('click', gameState)
-  playAgain.addEventListener('click', () => location.reload(true))
+  playAgain.addEventListener('click', () => location.reload())
   
   
   // define functions for music choice & add event listeners to respective buttons
