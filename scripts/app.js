@@ -290,7 +290,6 @@ function init() {
             if (item.state === 'unclicked') {
               item.state = 'clicked'
               item.clicked()
-              item.gridPosition.classList.add('.revealed')
             }
             else {return}
           })

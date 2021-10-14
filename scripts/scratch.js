@@ -27,7 +27,7 @@ function init() {
   let gridSize = 0
   const cellsArray = []
   let minesArray = []
-  const objectArray = []
+  let objectArray = []
   let correctFlagPlaced = []
   let mineCount = 0
   let flagsPlaced = 0
@@ -37,11 +37,38 @@ function init() {
   pageWrapper.classList.add('hide')
   playAgain.style.display = 'none'
 
+  function createGrid() {
+    // create a grid
+    for (let i = 0; i < gridSize; i++){
+      const cell = document.createElement('div')
+      cell.setAttribute('id', `${i}`)
+      cell.innerText = i
+      grid.appendChild(cell)
+      cellsArray.push(cell)
+    }
+  }
+
   // functions that define different states of the game --> win, lose, reset
   
-  function gameReset() {
-    console.log('game reset has been called')
-    resetBoard()
+  function resetBoard() {
+    minesArray.forEach(item => {
+      console.log(objectArray)
+      objectArray[item].gridPosition.classList.remove('mine')
+      objectArray[item].mine = 'off'
+    })
+    minesArray.forEach(item => {
+      objectArray[item].gridPosition.classList.remove('flag')
+      objectArray[item].flag = 'off'
+    })
+    objectArray = []
+    minesArray = []
+    console.log(objectArray)
+    generateGame()
+    pageWrapper.classList.remove('hide')
+    playAgain.style.display = 'none'
+    endGameMessage.classList.add('hide')
+    timer.style.display = 'flex'
+    mineDisplay.style.display = 'flex'
   }
   
   function endGameLoss() {
@@ -77,17 +104,14 @@ function init() {
     const scoreTime = document.createElement('p')
     scoreTime.innerText = `Your final score is ${Math.round(timer.innerText / mineDensity)}`
     winner.appendChild(scoreTime)
-
-    
   }
 
-  
 
   //define a funcction that sets the grid size & number of mines according to difficulty level chosen 
 
   function gameState(event) {
     if (event.target.classList.contains('beginner-button')){ 
-      mineCount = 10
+      mineCount = 1
       mineDisplay.innerText = mineCount
       width = 9
       gridSize = 81
@@ -97,6 +121,7 @@ function init() {
       welcomeScreen.classList.add('hide')
       pageWrapper.classList.remove('hide')
       mineDensity = 1.2
+      createGrid()
       generateGame()
     }   
     else if (event.target.classList.contains('advanced-button')){
@@ -110,6 +135,7 @@ function init() {
       welcomeScreen.classList.add('hide')
       pageWrapper.classList.remove('hide')
       mineDensity = 1.5
+      createGrid()
       generateGame()
     }
     else if (event.target.classList.contains('expert-button')) {
@@ -123,6 +149,7 @@ function init() {
       welcomeScreen.classList.add('hide')
       pageWrapper.classList.remove('hide')
       mineDensity = 2
+      createGrid()
       generateGame()
     } 
   }
@@ -132,8 +159,8 @@ function init() {
   beginnerButton.addEventListener('click', gameState)
   advancedButton.addEventListener('click', gameState)
   expertButton.addEventListener('click', gameState)
-  playAgain.addEventListener('click', gameReset)
-  changeMode.addEventListener('click', () => location.reload(true))
+  playAgain.addEventListener('click', gameState)
+  // changeMode.addEventListener('click', () => location.reload(true))
   
   
   // define functions for music choice & add event listeners to respective buttons
@@ -164,24 +191,6 @@ function init() {
   lofiButton.addEventListener('click', lofi)
   jazzButton.addEventListener('click', jazz)
 
-  function resetBoard() {
-    minesArray.forEach(item => {
-      objectArray[item].gridPosition.classList.remove('mine')
-      objectArray[item].mine = 'off'
-    })
-    minesArray = []
-    const randomNumbers = new Set()
-    while (randomNumbers.size < mineCount) {
-      randomNumbers.add(Math.floor(Math.random() * objectArray.length))
-    } 
-    minesArray = Array.from(randomNumbers)
-    minesArray.forEach(item => objectArray[item].placeMine())
-    objectArray.forEach(item => item.unclicked())
-
-    playAgain.style.display = 'none'
-    endGameMessage.style.display = 'none'
-
-  }
   
   
   
@@ -190,15 +199,7 @@ function init() {
   // --> generating a grid, a Cell Class constructor (methods of which will control the flow of the gameplay) and each cell object
   
   function generateGame() {
-   
-    // create a grid
-    for (let i = 0; i < gridSize; i++){
-      const cell = document.createElement('div')
-      cell.setAttribute('id', `${i}`)
-      cell.innerText = i
-      grid.appendChild(cell)
-      cellsArray.push(cell)
-    }
+    
     // class for constructing cell objects, calling methods on which will define the behaviour of each cell
     // and ultimately the game.
     class Cell {
@@ -226,6 +227,7 @@ function init() {
         }
         else {
           this.gridPosition.classList.toggle('flag')
+          console.log('flag on')
           this.innerText = ''
           this.flag = 'on'
           this.gridPosition.classList.contains('flag') ? flagsPlaced -= 1 : flagsPlaced += 1
@@ -319,13 +321,13 @@ function init() {
         } 
       }
     }
-      
+    
     // instantiate objects to fill the grid (one for each cell). Also pushing objects to an array to open 
     // up more methods for manipulating the data later 
     // add the correct class for the mode 
-
-  for (let i = 0; i < gridSize; i++){
-    const cellObject = new Cell(document.getElementById(`${i}`),'unclicked', 'off', i, 'none', 'none', [])
+    
+    for (let i = 0; i < gridSize; i++){
+      const cellObject = new Cell(document.getElementById(`${i}`),'unclicked', 'off', i, 'none', 'none', [])
       switch (gridSize) {
         case 81:
           cellObject.gridPosition.classList.add('beginner-cells')
@@ -338,24 +340,24 @@ function init() {
           case 576:
             cellObject.gridPosition.classList.add('expert-cells');
             cellObject.gridPosition.style.animation = 'bounce-top .9s both';
-          break;
-      }
-    objectArray.push(cellObject)
-    }
-
-    objectArray.forEach(item => item.unclicked())
-    //randomly generate a number call the placeMine method in corresponding objects
-    // in the objectsArray, and avoid duplicates using set()
-    const randomNumbers = new Set()
-    while (randomNumbers.size < mineCount) {
-      randomNumbers.add(Math.floor(Math.random() * objectArray.length))
-    } 
-    minesArray = Array.from(randomNumbers)
-    minesArray.forEach(item => objectArray[item].placeMine())
-    objectArray.forEach(item => item.unclicked())
-    console.log(minesArray)
-
-    // create arrays corresponding to cell structures that have different restrictions e.g., corner cells, column cells
+            break;
+          }
+          objectArray.push(cellObject)
+        }
+        
+        objectArray.forEach(item => item.unclicked())
+        //randomly generate a number call the placeMine method in corresponding objects
+        // in the objectsArray, and avoid duplicates using set()
+        const randomNumbers = new Set()
+        while (randomNumbers.size < mineCount) {
+          randomNumbers.add(Math.floor(Math.random() * objectArray.length))
+        } 
+        minesArray = Array.from(randomNumbers)
+        minesArray.forEach(item => objectArray[item].placeMine())
+        objectArray.forEach(item => item.unclicked())
+        console.log(minesArray)
+        
+        // create arrays corresponding to cell structures that have different restrictions e.g., corner cells, column cells
     // these will be used to 
     
     const corners = [objectArray[0], objectArray[width-1], objectArray[gridSize-width], objectArray[gridSize-1]]
@@ -424,6 +426,7 @@ function init() {
     objectArray.forEach(item => item.unclicked())
 
     function handleLeftClick (event){
+      console.log('left click')
       objectArray[event.target.id].clicked()
       if (objectArray[event.target.id].mine === 'on') {
         endGameLoss() 
@@ -437,8 +440,8 @@ function init() {
     function handleRightClick(event) {
       event.preventDefault()
       objectArray[event.target.id].placeFlag()
+      console.log(objectArray)
       correctFlagPlaced = objectArray.filter(item => item.mine === 'on' && item.flag === 'on')
-      console.log(correctFlagPlaced)
       correctFlagPlaced.length === mineCount ? endGameWin() : correctFlagPlaced = []
     }
 
@@ -458,6 +461,5 @@ function init() {
     grid.addEventListener('click', startTimer, { once: true })
 
   }
-
 }
  window.addEventListener('DOMContentLoaded', init)
