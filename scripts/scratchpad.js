@@ -1,5 +1,7 @@
 function init() {
 
+  //******* DO NOT LINK THIS FILE IT IS A SCRATCHPAD FOR NEW IDEAS ********// 
+
   
   //variables
   const grid = document.querySelector('.grid-container')

@@ -391,7 +391,7 @@ function init() {
       if (item === corners[0]){item.checkField(item.down(), item.right(), item.ddr())} 
       if (item === corners[1]){item.checkField(item.down(), item.left(), item.ddl())}
       if (item === corners[2]){item.checkField(item.up(), item.right(), item.dur())}
-      if (item === corners[3]){item.checkField(item.up(), item.left(), item.dur())}
+      if (item === corners[3]){item.checkField(item.up(), item.left(), item.dul())}
     }) 
 
     //event listeners & their functions to handle gameplay clicks (clicking on cells)
