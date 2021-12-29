@@ -406,7 +406,6 @@ body {
 
  /* Animation */ 
 
-      /* in house */
 
 @keyframes fadeIn {
   0% {opacity: 0;}
@@ -418,10 +417,6 @@ body {
   75% {opacity: 0.3;}
   100% {opacity: 1;}
 }
-
-/* external  */ 
-
-/* Generated with Animista  */
 
 
 @keyframes shake-horizontal{
