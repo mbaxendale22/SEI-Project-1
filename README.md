@@ -1,6 +1,8 @@
 # Minesweeper Clone in Vanilla Javascript
 
-This minesweeper clone was built while undertaking General Assembly’s Software Engineering Immersive Bootcamp. The purpose of the project was to deploy skills learnt during the HTML, CSS, and Javascript module of the course. The game retains the main aspects of the original, three game modes, a score calculator, and a choice of music. The game is designed to look good as well as functioning correctly by containing CSS animations and transitions, and is mobile responsive. The time frame for development was five days. 
+This minesweeper clone was built while undertaking General Assembly’s Software Engineering Immersive Bootcamp. The purpose of the project was to deploy skills learnt during the HTML, CSS, and Javascript module of the course. The game retains the main aspects of the original, three game modes, a score calculator, and a choice of music. The game is designed to look good as well as functioning correctly by containing CSS animations and transitions, and is mobile responsive. The time frame for development was five days.
+
+The game is deployed via GitHub Pages [here](https://mbaxendale22.github.io/SEI-Project-1/)
 
 ## Tech Stack 
 * HTML
