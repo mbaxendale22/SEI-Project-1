@@ -32,7 +32,7 @@ If all mines are successfully marked with a flag, the game is won and the user r
 
 
 ## Featured Code Snippet
-Each cell in the game is an instantiation of a Cell class, properties of which define the state of a given cell and methods to define its behaviour. 
+Each cell in the game is an instantiation of a Cell class, properties of which define the state of a given cell and methods define its behaviour. 
 The clicked() method below handles the user left-clicking on a cell, it includes a recursive option should the correct condition 
 be met (i.e., the cell is blank)
 
