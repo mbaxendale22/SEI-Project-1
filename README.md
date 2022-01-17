@@ -79,30 +79,26 @@ Then the function itself:
 
     ```
 
-    A problem with setting these mines, was creating an array with no duplicate numbers (this is a bug that took me a while to spot before fixing). There should only be one mine on each cell, if there's multiple then there will be too few mines distributed across the grid. I looked into shuffling the array using the Fisher-Yates algorithm. While I was researching the implementation of this algorithm, I stumbled across the fact that JavaScript has now added a `Set` constructor into the language - a `Set` being an array of numbers with no duplicates. This seemed like a great new feature to take advantage of, so I was able to use a `Set` to insert random indexes into, in order to select the desired about of mines. I then used the `Array` constructor to convert the Set to an array, on which I was able to loop through an call the `.placeMine()` method, which simply sets the cell's `mine` property to 'on'.
+  A problem with setting these mines, was creating an array with no duplicate numbers (this is a bug that took me a while to spot before fixing. There should only be one mine on each cell, if there's multiple then there will be too few mines distributed across the grid. I looked into shuffling the array using the Fisher-Yates algorithm. While I was researching the implementation of this algorithm, I stumbled across the fact that JavaScript has now added a `Set` constructor into the language - a `Set` being an array of numbers with no duplicates. This seemed like a great new feature to take advantage of, so I was able to use a `Set` to insert random indexes into, in order to select the desired about of mines. I then used the `Array` constructor to convert the Set to an array, on which I was able to loop through an call the `.placeMine()` method, which simply sets the cell's `mine` property to 'on'.
 
-   3. Back to `handleLeftClick()` function. After checking to see if the clicked cell contains a mine, I have a further check to call the `clicked()` method on cells with a 0 value. In hindsight this may be a redundant check, already handles by the first `.clicked()` call. 
+  3. Back to `handleLeftClick()` function. After checking to see if the clicked cell contains a mine, I have a further check to call the `clicked()` method on cells with a 0 value. In hindsight this may be a redundant check, already handles by the first `.clicked()` call. 
 
-   So then we get to the `clicked()` method itself. Firstly, the method treats cells with different properties in different ways. 
+  So then we get to the `clicked()` method itself. Firstly, the method treats cells with different properties in different ways. 
 
-   1. If the cell has a mine, then certain UI changes happen, specifically changes to represent 'opening' the cell (an animation, background color change, and displaying a mine) 
+  1. If the cell has a mine, then certain UI changes happen, specifically changes to represent 'opening' the cell (an animation, background color change, and displaying a mine) 
 
-```javascript
+  ```javascript
 
-
- // main recursive function which handles showing correct numbers on mine-adjacent squares & auto-opening blank squares
-      clicked() {
-        this.gridPosition.style.animation = 'jello-horizontal .9s both'
-        if (this.mine === 'on'){
-          this.gridPosition.style.animation = 'shake-horizontal .8s cubic-bezier(.455,.03,.515,.955) both'
-          this.state = 'clicked'
-          this.gridPosition.style.backgroundColor = 'rgba(168, 202, 186, 0.8)'
-          this.gridPosition.innerText = ''
-          this.gridPosition.classList.add('mine')
-          return
-        }
-
-
+  clicked() {
+    this.gridPosition.style.animation = 'jello-horizontal .9s both'
+    if (this.mine === 'on'){
+      this.gridPosition.style.animation = 'shake-horizontal .8s cubic-bezier(.455,.03,.515,.955) both'
+      this.state = 'clicked'
+      this.gridPosition.style.backgroundColor = 'rgba(168, 202, 186, 0.8)'
+      this.gridPosition.innerText = ''
+      this.gridPosition.classList.add('mine')
+      return
+    }
   ```
 
   2. If a cell has ta value greater than 0, then again we'll get UI changes to reflect it being 'opened', as well as displaying that number to the user (the number represents how many mines are in cells adjacent to that one)
