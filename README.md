@@ -63,7 +63,7 @@ Then the function itself:
   ```
 
   A few things are happening here: 
-  1. the `clicked()` method is called on the cell (as noted above, each cell in the instantiate of the Cell class and so has access to the .`clicked()` method)
+  1. the `clicked()` method is called on the cell (as noted above, each cell is an instantiation of the `Cell` class and so has access to the `clicked()` method)
   2. We're checking to see whether the cell object has the `mine` property on. At the beginning of each game, a random selection of cells have their `mine` property set to 'on' depending on the difficult level set. This process is achieved with a function called `placeMines()`, which looks like this 
    
    ```javascript 
