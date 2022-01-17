@@ -64,7 +64,7 @@ Then the function itself:
 
   A few things are happening here: 
   1. the `clicked()` method is called on the cell (as noted above, each cell is an instantiation of the `Cell` class and so has access to the `clicked()` method)
-  2. We're checking to see whether the cell object has the `mine` property on. At the beginning of each game, a random selection of cells have their `mine` property set to 'on' depending on the difficult level set. This process is achieved with a function called `placeMines()`, which looks like this 
+  2. We're checking to see whether the cell object has the `mine` property on. At the beginning of each game, a random selection of cells have their `mine` property set to 'on' depending on the difficult level chosen. This process is achieved with a function called `placeMines()`, which looks like this: 
    
    ```javascript 
 
@@ -78,9 +78,9 @@ Then the function itself:
     }
   ```
 
-  A problem with setting these mines, was creating an array with no duplicate numbers (this is a bug that took me a while to spot before fixing. There should only be one mine on each cell, if there's multiple then there will be too few mines distributed across the grid. I looked into shuffling the array using the Fisher-Yates algorithm. While I was researching the implementation of this algorithm, I stumbled across the fact that JavaScript has now added a `Set` constructor into the language - a `Set` being an array of numbers with no duplicates. This seemed like a great new feature to take advantage of, so I was able to use a `Set` to insert random indexes into, in order to select the desired about of mines. I then used the `Array` constructor to convert the Set to an array, on which I was able to loop through an call the `.placeMine()` method, which simply sets the cell's `mine` property to 'on'.
+  A problem with setting these mines was creating an array with no duplicate numbers. Mines are 'placed' by creating an array of numbers and then selecting the cells with corresponding positions on the grid to have their mine 'switched on'. There should only be one mine on each cell, if there's multiple then there will be too few mines distributed across the grid. I looked into shuffling the array using the Fisher-Yates algorithm. While I was researching the implementation of this algorithm, I stumbled across the fact that JavaScript has now added a `Set` constructor into the language - a `Set` being an array of numbers with no duplicates. This seemed like a great new feature to take advantage of, so I was able to use a `Set` to insert random indexes into, in order to select the desired about of mines. I then used the `Array` constructor to convert the Set to an array, on which I was able to loop through an call the `.placeMine()` method, which simply sets the cell's `mine` property to 'on'.
 
-  3. Back to `handleLeftClick()` function. After checking to see if the clicked cell contains a mine, I have a further check to call the `clicked()` method on cells with a 0 value. In hindsight this may be a redundant check, already handles by the first `.clicked()` call. 
+  1. Back to `handleLeftClick()` function. After checking to see if the clicked cell contains a mine, I have a further check to call the `clicked()` method on cells with a 0 value. In hindsight this may be a redundant check, already handles by the first `.clicked()` call. 
 
   So then we get to the `clicked()` method itself. Firstly, the method treats cells with different properties in different ways. 
 
