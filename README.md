@@ -76,8 +76,7 @@ Then the function itself:
       minesArray = Array.from(randomNumbers)
       minesArray.forEach(item => objectArray[item].placeMine())
     }
-
-    ```
+  ```
 
   A problem with setting these mines, was creating an array with no duplicate numbers (this is a bug that took me a while to spot before fixing. There should only be one mine on each cell, if there's multiple then there will be too few mines distributed across the grid. I looked into shuffling the array using the Fisher-Yates algorithm. While I was researching the implementation of this algorithm, I stumbled across the fact that JavaScript has now added a `Set` constructor into the language - a `Set` being an array of numbers with no duplicates. This seemed like a great new feature to take advantage of, so I was able to use a `Set` to insert random indexes into, in order to select the desired about of mines. I then used the `Array` constructor to convert the Set to an array, on which I was able to loop through an call the `.placeMine()` method, which simply sets the cell's `mine` property to 'on'.
 
